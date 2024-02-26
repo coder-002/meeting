@@ -1,4 +1,4 @@
-import { ReactNode, useState } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import TabList from "../../components/form/TabList";
 import {
   SelectTabData,
@@ -14,9 +14,11 @@ import {
 } from "@fluentui/react-icons";
 import { TrayItemRemove20Filled } from "@fluentui/react-icons/lib/fonts";
 import { Navigation_Routes } from "../../routes/routes.constant";
+import { useLocation } from "react-router-dom";
 
 const Setup = ({ children }: { children: ReactNode }) => {
   const [selectedValue, setSelectedValue] = useState<TabValue>("organization");
+  const { pathname } = useLocation();
   const tablist = [
     {
       id: "1",
@@ -37,30 +39,34 @@ const Setup = ({ children }: { children: ReactNode }) => {
       label: "Unit",
       value: "Unit",
       icon: <Signature16Filled />,
-      url: Navigation_Routes.ORGANIZATION,
+      url: Navigation_Routes.UNIT,
     },
     {
       id: "4",
       label: "Committee",
       value: "committee",
       icon: <Group20Filled />,
-      url: Navigation_Routes.ORGANIZATION,
+      url: Navigation_Routes.COMMITTEE,
     },
     {
       id: "5",
       label: "Designation",
       value: "designation",
       icon: <PositionToBack20Filled />,
-      url: Navigation_Routes.ORGANIZATION,
+      url: Navigation_Routes.DESIGNATION,
     },
     {
       id: "6",
       label: "Deduction",
       value: "deduction",
       icon: <TrayItemRemove20Filled />,
-      url: Navigation_Routes.ORGANIZATION,
+      url: Navigation_Routes.DEDUCTION,
     },
   ];
+  useEffect(() => {
+    const menu = pathname.split("/")[2];
+    setSelectedValue(menu);
+  }, [pathname]);
   const handleSelect = (event: SelectTabEvent, data: SelectTabData) => {
     setSelectedValue(data.value);
   };

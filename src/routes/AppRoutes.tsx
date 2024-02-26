@@ -7,6 +7,11 @@ import Member from "../pages/member/Member";
 import Setup from "../pages/setup/Setup";
 import Calendar from "../pages/Calendar";
 import Organization from "../pages/setup/Organization";
+import Branch from "../pages/setup/Branch";
+import Unit from "../pages/setup/Unit";
+import Committee from "../pages/setup/Committee";
+import Designation from "../pages/setup/Designation";
+import Deduction from "../pages/setup/Deduction";
 
 const AppRoutes = () => {
   const routes = [
@@ -40,6 +45,56 @@ const AppRoutes = () => {
         <Layout>
           <Setup>
             <Organization />
+          </Setup>
+        </Layout>
+      ),
+    },
+    {
+      path: Navigation_Routes.BRANCH,
+      element: (
+        <Layout>
+          <Setup>
+            <Branch />
+          </Setup>
+        </Layout>
+      ),
+    },
+    {
+      path: Navigation_Routes.UNIT,
+      element: (
+        <Layout>
+          <Setup>
+            <Unit />
+          </Setup>
+        </Layout>
+      ),
+    },
+    {
+      path: Navigation_Routes.COMMITTEE,
+      element: (
+        <Layout>
+          <Setup>
+            <Committee />
+          </Setup>
+        </Layout>
+      ),
+    },
+    {
+      path: Navigation_Routes.DESIGNATION,
+      element: (
+        <Layout>
+          <Setup>
+            <Designation />
+          </Setup>
+        </Layout>
+      ),
+    },
+    {
+      path: Navigation_Routes.DEDUCTION,
+      element: (
+        <Layout>
+          <Setup>
+            <Deduction />
           </Setup>
         </Layout>
       ),
