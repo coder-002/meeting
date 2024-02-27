@@ -12,7 +12,9 @@ import Select from "../../components/form/Select";
 import { useGetUnits } from "../../services/setup/service-unit";
 import { selectOptions } from "../../helpers/selectOptions";
 import httpStatus from "http-status";
-import { IBranch, IPostBranch } from "../../models/setup/branch";
+import { IPostBranch } from "../../models/setup/branch";
+import { branchSchema } from "../../schema/setup/setupSchema";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const initialValues = {
   orgUnitId: 0,
@@ -34,8 +36,9 @@ const Branch = () => {
       return { id: item.id, name: item.unitName };
     });
 
-  const { register, handleSubmit, reset } = useForm<IBranch>({
+  const { register, handleSubmit, reset } = useForm({
     defaultValues: initialValues,
+    resolver: yupResolver(branchSchema),
   });
 
   const cols = [

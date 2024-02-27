@@ -92,6 +92,7 @@ const Committee = () => {
             label="Unit Name"
             options={selectOptions(selectUnit || [])}
             placeholder="Select Unit Name"
+            required
           />
           <Select
             name="branchId"
@@ -99,6 +100,7 @@ const Committee = () => {
             label="Branch Name"
             options={selectOptions(selectBranch || [])}
             placeholder="Select Unit Name"
+            required
           />
 
           <Input

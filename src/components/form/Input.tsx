@@ -5,7 +5,12 @@ import {
   InputProps,
   Field,
 } from "@fluentui/react-components";
-import { RegisterOptions, UseFormRegister, FieldValues } from "react-hook-form";
+import {
+  RegisterOptions,
+  UseFormRegister,
+  FieldValues,
+  FieldError,
+} from "react-hook-form";
 
 const useStyles = makeStyles({
   root: {
@@ -26,7 +31,7 @@ interface IInput<TFieldValues extends FieldValues = FieldValues>
   disabled?: boolean;
   label?: string;
   required?: boolean;
-  error?: string;
+  error?: string | FieldError;
   name: string;
   width?: string;
 }
