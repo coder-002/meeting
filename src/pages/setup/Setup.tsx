@@ -64,6 +64,7 @@ const Setup = ({ children }: { children: ReactNode }) => {
     },
   ];
   useEffect(() => {
+    if (!pathname) return;
     const menu = pathname.split("/")[2];
     setSelectedValue(menu);
   }, [pathname]);
@@ -71,14 +72,14 @@ const Setup = ({ children }: { children: ReactNode }) => {
     setSelectedValue(data.value);
   };
   return (
-    <div>
+    <div className="flex gap-4">
       <TabList
         tabs={tablist}
         onTabSelect={handleSelect}
         selectedValue={selectedValue}
         vertical
       />
-      <div className="flex-1 p-4">{children}</div>
+      <div className="flex-1 p-4 shadow-md">{children}</div>
     </div>
   );
 };
