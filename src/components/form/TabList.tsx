@@ -47,9 +47,11 @@ const TabList = ({
       >
         {tabs.map((item) => {
           return (
-            <Tab id={item.id} value={item.value} icon={item.icon}>
-              <Link to={item.url}>{item.label}</Link>
-            </Tab>
+            <Link to={item.url}>
+              <Tab id={item.id} value={item.value} icon={item.icon}>
+                {item.label}
+              </Tab>
+            </Link>
           );
         })}
       </FluentTabs>
