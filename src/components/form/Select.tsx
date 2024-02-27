@@ -15,7 +15,7 @@ interface ISelect<TFieldValues extends FieldValues = FieldValues>
   name: string;
   error?: string;
   required?: boolean;
-  register: UseFormRegister<TFieldValues>;
+  register: UseFormRegister<any>;
   rules?: RegisterOptions;
 }
 interface ISelectOption {

@@ -10,6 +10,8 @@ import {
   DataGridCell,
   OnSelectionChangeData,
   Spinner,
+  Button,
+  Overflow,
 } from "@fluentui/react-components";
 import { ReactNode, useEffect, useState } from "react";
 
@@ -28,6 +30,7 @@ type Props<T> = {
   onSelect?: (item: T) => void;
   onEditClick?: () => void;
   onDeleteClick?: () => void;
+  onAction?: () => void;
   btnText?: string;
 };
 
@@ -109,10 +112,12 @@ export const TableComp = <T extends {}>(props: Props<T>) => {
     <Spinner style={{ padding: "0.5em" }} />
   ) : (
     <div>
-      {/* <div className="flex justify-between mb-3">
-        <Search />
-        {props.btnText && <AddButton buttonText={props.btnText} />}
-      </div> */}
+      <div className="flex justify-between mb-3">
+        {/* <Search /> */}
+        {props.btnText && (
+          <Button onClick={props.onAction}>{props.btnText}</Button>
+        )}
+      </div>
       <DataGrid
         columns={cols}
         items={props.data}

@@ -1,9 +1,29 @@
-import { Badge, Spinner } from "@fluentui/react-components";
+import { Badge, Button } from "@fluentui/react-components";
 import { TableComp } from "../../components/DataGrid/TableComp";
-import { useGetDesignation } from "../../services/setup/service-designation";
+import {
+  useCreateDesignation,
+  useGetDesignation,
+} from "../../services/setup/service-designation";
+import { useState } from "react";
+import Drawer from "../../components/Drawer/Drawer";
+import Input from "../../components/form/Input";
+import { useForm } from "react-hook-form";
+import { IDesignation, IPostDesignation } from "../../models/setup/designation";
+import httpStatus from "http-status";
 
+const initialValues = {
+  designationCode: "",
+  designationName: "",
+  isActive: true,
+};
 const Designation = () => {
-  const { data, isLoading } = useGetDesignation();
+  const [isOpen, setIsOpen] = useState(false);
+  const { data } = useGetDesignation();
+  const { mutateAsync: createDesignation } = useCreateDesignation();
+
+  const { register, handleSubmit, reset } = useForm<IDesignation>({
+    defaultValues: initialValues,
+  });
   const cols = [
     { dataKey: "designationName", title: "Designation Name" },
     {
@@ -21,11 +41,54 @@ const Designation = () => {
       },
     },
   ];
-  if (isLoading) {
-    return <Spinner />;
-  }
 
-  return <TableComp columns={cols} data={data || []} />;
+  const submitHandler = async (data: IPostDesignation) => {
+    const response = await createDesignation(data);
+    if (response.status === httpStatus.OK) {
+      setIsOpen(false);
+      reset(initialValues);
+    }
+  };
+
+  return (
+    <div>
+      <Drawer isOpen={isOpen} setIsOpen={setIsOpen} title="Add Designation">
+        <form onSubmit={handleSubmit(submitHandler)}>
+          <Input
+            name="designationCode"
+            register={register}
+            label="Designation Code"
+            required
+          />
+          <Input
+            name="designationName"
+            register={register}
+            label="Designation Name"
+            required
+          />
+          <div className="flex gap-3 mt-3">
+            <Button appearance="primary" type="submit">
+              Create
+            </Button>
+            <Button
+              onClick={() => {
+                setIsOpen(!open);
+                reset(initialValues);
+              }}
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </Drawer>
+      <TableComp
+        columns={cols}
+        data={data || []}
+        btnText="Add Designation"
+        onAction={() => setIsOpen(!isOpen)}
+      />
+    </div>
+  );
 };
 
 export default Designation;

@@ -1,6 +1,7 @@
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import instance from "../apiService";
 import { api } from "../service-api";
+import { IPostCommittee } from "../../models/setup/committee";
 
 const getCommittee = () => {
   return instance.get(api.committee.get);
@@ -13,4 +14,20 @@ const useGetCommittee = () => {
   });
 };
 
-export { useGetCommittee };
+const createCommittee = (committee: IPostCommittee) => {
+  return instance.post(api.committee.post, committee);
+};
+
+const useCreateCommittee = () => {
+  const queryClient = useQueryClient();
+  return useMutation(createCommittee, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(api.committee.get);
+    },
+    onError: (e) => {
+      console.log(e);
+    },
+  });
+};
+
+export { useGetCommittee, useCreateCommittee };

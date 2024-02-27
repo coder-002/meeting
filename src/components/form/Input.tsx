@@ -18,6 +18,8 @@ const useStyles = makeStyles({
 
 interface IInput<TFieldValues extends FieldValues = FieldValues>
   extends InputProps {
+  register: UseFormRegister<any>;
+  rules?: RegisterOptions;
   contentBefore?: any;
   contentAfter?: any;
   placeholder?: string;
@@ -27,8 +29,6 @@ interface IInput<TFieldValues extends FieldValues = FieldValues>
   error?: string;
   name: string;
   width?: string;
-  rules?: RegisterOptions;
-  register: UseFormRegister<TFieldValues>;
 }
 const Input = ({
   contentBefore,
