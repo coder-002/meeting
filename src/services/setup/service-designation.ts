@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import instance from "../apiService";
 import { api } from "../service-api";
-import { IDesignation, IPostDesignation } from "../../models/setup/designation";
+import { IPostDesignation } from "../../models/setup/designation";
 
 const getDesignation = () => {
   return instance.get(api.designation.get);

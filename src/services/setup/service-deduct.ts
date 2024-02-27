@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import instance from "../apiService";
 import { api } from "../service-api";
-import { IDeduction, IPostDeduction } from "../../models/setup/deduction";
+import { IPostDeduction } from "../../models/setup/deduction";
 
 const getDeduct = () => {
   return instance.get(api.deduct.get);
