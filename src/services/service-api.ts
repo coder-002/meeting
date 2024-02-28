@@ -22,4 +22,8 @@ export const api = {
     get: "/deduct",
     post: "/deduct",
   },
+  meeting: {
+    get: "/Meeting/GetAll",
+    post: "/Meeting",
+  },
 };
