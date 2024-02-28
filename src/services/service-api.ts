@@ -26,4 +26,9 @@ export const api = {
     get: "/Meeting/GetAll",
     post: "/Meeting",
   },
+  member: {
+    getMember: "/member/page",
+    post: "/member",
+    init: "/member/init",
+  },
 };

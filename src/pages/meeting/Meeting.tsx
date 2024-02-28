@@ -18,6 +18,7 @@ import { selectOptions } from "../../helpers/selectOptions";
 import { IBranch } from "../../models/setup/branch";
 import { IMeeting, IPostMeeting } from "../../models/meeting";
 import httpStatus from "http-status";
+import { useNavigate } from "react-router-dom";
 
 const initialValues = {
   branchId: 0,
@@ -30,6 +31,7 @@ const initialValues = {
 };
 const Meeting = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [rowId, setRowId] = useState(0);
   const { data } = useGetMeeting();
   const { data: unitData } = useGetUnits();
   const { data: committeData } = useGetCommittee();
@@ -93,7 +95,7 @@ const Meeting = () => {
         return (
           <>
             {
-              branchData?.find((unit: IBranch) => unit.id == item?.branchId)
+              branchData?.find((branch: IBranch) => branch.id == item?.branchId)
                 ?.branchName
             }
           </>
@@ -135,7 +137,7 @@ const Meeting = () => {
     },
   ];
 
-  if (!unitData && !committeData && !branchData) {
+  if (!unitData || !committeData || !branchData) {
     return <Spinner size="large" />;
   }
 
@@ -145,6 +147,10 @@ const Meeting = () => {
       setIsOpen(false);
       reset(initialValues);
     }
+  };
+
+  const handleRowClick = (items: any) => {
+    setRowId(items.id);
   };
 
   return (
@@ -175,12 +181,7 @@ const Meeting = () => {
               required
             />
             <Input name="topic" register={register} label="Topic" required />
-            <Input
-              name="description"
-              register={register}
-              label="Description"
-              required
-            />
+            <Input name="description" register={register} label="Description" />
             <Select
               name="committeeId"
               register={register}
@@ -189,7 +190,7 @@ const Meeting = () => {
               placeholder="Select Committee Name"
               required
             />
-            <Input name="notes" register={register} label="Notes" required />
+            <Input name="notes" register={register} label="Notes" />
             <div className=" flex gap-3 mt-3">
               <Button appearance="primary" type="submit">
                 Create
@@ -211,6 +212,7 @@ const Meeting = () => {
         data={data || []}
         onAction={() => setIsOpen(!isOpen)}
         btnText="Add Meeting"
+        onSelect={handleRowClick}
       />
     </div>
   );

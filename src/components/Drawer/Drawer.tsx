@@ -13,15 +13,16 @@ interface IDrawerProps {
   title: string;
   setIsOpen: Function;
   children: ReactNode;
+  size?: string;
 }
 
-const Drawer = ({ isOpen, setIsOpen, children, title }: IDrawerProps) => {
+const Drawer = ({ isOpen, setIsOpen, children, title, size }: IDrawerProps) => {
   return (
     <OverlayDrawer
       open={isOpen}
       onOpenChange={(_, { open }) => setIsOpen(open)}
       position="end"
-      style={{ width: "500px" }}
+      style={size === "lg" ? { width: "60vw" } : { width: "500px" }}
     >
       <DrawerHeader>
         <DrawerHeaderTitle

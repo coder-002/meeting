@@ -11,6 +11,8 @@ import {
   OnSelectionChangeData,
   Spinner,
   Button,
+  DataGridProps,
+  TableRowId,
 } from "@fluentui/react-components";
 import { ReactNode, useEffect, useState } from "react";
 
@@ -141,10 +143,10 @@ export const TableComp = <T extends {}>(props: Props<T>) => {
               selectionCell={{
                 checkboxIndicator: { "aria-label": "Select row" },
               }}
-              onClick={() => {
-                // Handle row click here
-                console.log("Row clicked:", item);
-              }}
+              // onClick={() => {
+              //   // Handle row click here
+              //   handle
+              // }}
             >
               {({ renderCell }) => (
                 <DataGridCell>{renderCell(item)}</DataGridCell>

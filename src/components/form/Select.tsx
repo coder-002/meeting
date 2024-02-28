@@ -20,7 +20,7 @@ interface ISelect<TFieldValues extends FieldValues = FieldValues>
 }
 interface ISelectOption {
   label: string;
-  value: string;
+  value: string | number;
 }
 
 const useStyles = makeStyles({
