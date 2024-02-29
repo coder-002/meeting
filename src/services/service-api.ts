@@ -25,10 +25,14 @@ export const api = {
   meeting: {
     get: "/Meeting/GetAll",
     post: "/Meeting",
+    delete: "/Meeting/{meetingId}",
+    patch: "/Meeting/{id}",
+    approve: "/Meeting/Approve/{meetingId}",
   },
   member: {
     getMember: "/member/page",
     post: "/member",
     init: "/member/init",
+    getById: "member/{id}",
   },
 };

@@ -12,6 +12,8 @@ import Unit from "../pages/setup/Unit";
 import Committee from "../pages/setup/Committee";
 import Designation from "../pages/setup/Designation";
 import Deduction from "../pages/setup/Deduction";
+import MemberDetails from "../pages/member/MemberDetails";
+import MeetingDetails from "../pages/meeting/MeetingDetails";
 
 const AppRoutes = () => {
   const routes = [
@@ -32,10 +34,26 @@ const AppRoutes = () => {
       ),
     },
     {
+      path: Navigation_Routes.MEETING_DETAILS,
+      element: (
+        <Layout>
+          <MeetingDetails />
+        </Layout>
+      ),
+    },
+    {
       path: Navigation_Routes.MEMBER,
       element: (
         <Layout>
           <Member />
+        </Layout>
+      ),
+    },
+    {
+      path: Navigation_Routes.MEMBER_DETAILS,
+      element: (
+        <Layout>
+          <MemberDetails />
         </Layout>
       ),
     },

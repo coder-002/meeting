@@ -2,6 +2,7 @@ import { useState } from "react";
 import { TableComp } from "../../components/DataGrid/TableComp";
 import {
   useCreateMeeting,
+  useDeleteMeeting,
   useGetMeeting,
 } from "../../services/service-meeting";
 import { Badge, Button, Spinner } from "@fluentui/react-components";
@@ -18,6 +19,9 @@ import { selectOptions } from "../../helpers/selectOptions";
 import { IBranch } from "../../models/setup/branch";
 import { IMeeting, IPostMeeting } from "../../models/meeting";
 import httpStatus from "http-status";
+import { Delete16Filled, Eye16Filled } from "@fluentui/react-icons";
+import { useNavigate } from "react-router-dom";
+import { Navigation_Routes } from "../../routes/routes.constant";
 
 const initialValues = {
   branchId: 0,
@@ -30,15 +34,17 @@ const initialValues = {
 };
 const Meeting = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [rowId, setRowId] = useState(0);
+  const [view, setView] = useState("");
   const { data } = useGetMeeting();
   const { data: unitData } = useGetUnits();
   const { data: committeData } = useGetCommittee();
+  const { mutateAsync: deleteMeeting } = useDeleteMeeting();
   const { data: branchData } = useGetBranch();
   const { mutateAsync: createMeeting } = useCreateMeeting();
   const { register, handleSubmit, reset } = useForm<IMeeting>({
     defaultValues: initialValues,
   });
+  const navigate = useNavigate();
 
   const selectUnit =
     unitData &&
@@ -136,10 +142,6 @@ const Meeting = () => {
     },
   ];
 
-  if (!unitData || !committeData || !branchData) {
-    return <Spinner size="large" />;
-  }
-
   const onSubmitHandler = async (data: IPostMeeting) => {
     const response = await createMeeting(data);
     if (response.status == httpStatus.OK) {
@@ -149,8 +151,21 @@ const Meeting = () => {
   };
 
   const handleRowClick = (items: any) => {
-    setRowId(items.id);
+    setView(items?.id);
   };
+  const handleView = () => {
+    navigate(Navigation_Routes.MEETING_DETAILS.replace(":id", view));
+  };
+  const handleDelete = async (view: string) => {
+    const response = await deleteMeeting(view);
+    if (response.status === httpStatus.OK) {
+      alert("Deleted");
+    }
+  };
+
+  if (!unitData || !committeData || !branchData) {
+    return <Spinner size="large" />;
+  }
 
   return (
     <div>
@@ -206,13 +221,33 @@ const Meeting = () => {
           </div>
         </form>
       </Drawer>
-      <TableComp
-        columns={cols}
-        data={data || []}
-        onAction={() => setIsOpen(!isOpen)}
-        btnText="Add Meeting"
-        onSelect={handleRowClick}
-      />
+      <div className="relative">
+        {view && (
+          <div className="flex gap-4 absolute top-0 right-0">
+            <Button
+              icon={<Eye16Filled />}
+              appearance="primary"
+              onClick={handleView}
+            >
+              View
+            </Button>
+            <Button
+              icon={<Delete16Filled />}
+              appearance="primary"
+              onClick={() => handleDelete(view)}
+            >
+              Delete
+            </Button>
+          </div>
+        )}
+        <TableComp
+          columns={cols}
+          data={data || []}
+          onAction={() => setIsOpen(!isOpen)}
+          btnText="Add Meeting"
+          onSelect={handleRowClick}
+        />
+      </div>
     </div>
   );
 };

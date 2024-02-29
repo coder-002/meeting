@@ -9,27 +9,28 @@ import {
   Subtitle1,
 } from "@fluentui/react-components";
 import { useForm } from "react-hook-form";
-import {
-  useAddMember,
-  useGetMember,
-  useMemberInit,
-} from "../../services/service-members";
+import { useGetMember, useMemberInit } from "../../services/service-members";
 import { useGetBranch } from "../../services/setup/service-branch";
 import { IBranch } from "../../models/setup/branch";
 import Select from "../../components/form/Select";
 import { selectOptions } from "../../helpers/selectOptions";
-import { IOptions, IPostMember } from "../../models/member/member";
-import httpStatus from "http-status";
+import { IOptions } from "../../models/member/member";
+import { Edit16Filled } from "@fluentui/react-icons";
+import { useNavigate } from "react-router-dom";
+import { Navigation_Routes } from "../../routes/routes.constant";
 
 const Member = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState([]);
+  const [edit, setEdit] = useState(false);
+  const [updateId, setUpdateId] = useState("");
   const [options, setOptions] = useState<IOptions>();
   const { data: memberInit } = useMemberInit();
   const { mutateAsync: getMember, isLoading } = useGetMember();
-  const { mutateAsync: addMember } = useAddMember();
+  // const { data: singleMember } = useGetMemberById(updateId);
   const { data: branchData } = useGetBranch();
-  const { register, handleSubmit } = useForm();
+  const navigate = useNavigate();
+  const { register } = useForm();
   const selectBranch =
     branchData &&
     branchData.map((item: IBranch) => {
@@ -49,7 +50,6 @@ const Member = () => {
   }, []);
 
   useEffect(() => {
-    console.log(memberInit);
     setOptions(memberInit?.data);
   }, [memberInit]);
 
@@ -83,6 +83,15 @@ const Member = () => {
   //   }
   //   console.log(data);
   // };
+
+  const handleSelect = (item: any) => {
+    setEdit(true);
+    setUpdateId(item?.id);
+  };
+
+  const handleEdit = () => {
+    navigate(Navigation_Routes.MEMBER_DETAILS.replace(":id", updateId));
+  };
   if (!branchData || !memberInit || isLoading) {
     return <Spinner size="large" />;
   }
@@ -154,7 +163,6 @@ const Member = () => {
                   placeholder="Please select Salutation"
                   required
                 />
-                memberInit
                 <Input
                   name="firstName"
                   register={register}
@@ -213,12 +221,26 @@ const Member = () => {
           </div>
         </form>
       </Drawer>
-      <TableComp
-        columns={cols}
-        data={data || []}
-        onAction={() => setIsOpen(!isOpen)}
-        btnText="Add Member"
-      />
+      <div className="relative">
+        {edit && (
+          <div className="flex gap-4 absolute top-0 right-0">
+            <Button
+              icon={<Edit16Filled />}
+              appearance="primary"
+              onClick={handleEdit}
+            >
+              Edit
+            </Button>
+          </div>
+        )}
+        <TableComp
+          columns={cols}
+          data={data || []}
+          onAction={() => setIsOpen(!isOpen)}
+          btnText="Add Member"
+          onSelect={handleSelect}
+        />
+      </div>
     </div>
   );
 };

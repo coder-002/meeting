@@ -10,4 +10,6 @@ export const Navigation_Routes = {
   DEDUCTION: "/setup/deduction",
   BRANCH: "/setup/branch",
   CALENDAR: "/calendar",
+  MEMBER_DETAILS: "/member/:id",
+  MEETING_DETAILS: "/Meeting/:id",
 };

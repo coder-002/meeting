@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import instance from "./apiService";
 import { api } from "./service-api";
-import { IPostMeeting } from "../models/meeting";
+import { IMeeting, IPostMeeting } from "../models/meeting";
 
 const getMeeting = () => {
   return instance.get(api.meeting.get);
@@ -29,5 +29,33 @@ const useCreateMeeting = () => {
     },
   });
 };
+const deleteMeeting = (id: string) => {
+  return instance.delete(api.meeting.delete.replace("{meetingId}", id));
+};
 
-export { useGetMeeting, useCreateMeeting };
+const useDeleteMeeting = () => {
+  const queryClient = useQueryClient();
+  return useMutation(deleteMeeting, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(api.meeting.get);
+    },
+    onError: (e: any) => {
+      console.log(e);
+    },
+  });
+};
+
+const approveMeeting = (id: string) => {
+  return instance.post(api.meeting.approve.replace("{meetingId}", id));
+};
+
+const useApproveMeeting = () => {
+  const queryClient = useQueryClient();
+  return useMutation(approveMeeting, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(api.meeting.get);
+    },
+  });
+};
+
+export { useGetMeeting, useCreateMeeting, useDeleteMeeting, useApproveMeeting };
