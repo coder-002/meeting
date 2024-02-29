@@ -2,7 +2,6 @@ import { Badge, Button } from "@fluentui/react-components";
 import { TableComp } from "../../components/DataGrid/TableComp";
 import {
   useCreateCommittee,
-  useDeleteCommittee,
   useGetCommittee,
 } from "../../services/setup/service-committee";
 import { useGetUnits } from "../../services/setup/service-unit";
@@ -15,7 +14,9 @@ import Select from "../../components/form/Select";
 import { selectOptions } from "../../helpers/selectOptions";
 import httpStatus from "http-status";
 import { ICommittee, IPostCommittee } from "../../models/setup/committee";
-import { Delete16Filled } from "@fluentui/react-icons";
+import { Eye16Filled } from "@fluentui/react-icons/lib/fonts";
+import { useNavigate } from "react-router-dom";
+import { Navigation_Routes } from "../../routes/routes.constant";
 
 const initialValues = {
   unitId: 0,
@@ -32,9 +33,9 @@ const Committee = () => {
   const [rowId, setRowId] = useState("");
   const { data } = useGetCommittee();
   const { mutateAsync: createCommittee } = useCreateCommittee();
-  const { mutateAsync: deleteCommittee } = useDeleteCommittee();
   const { data: unitData } = useGetUnits();
   const { data: branchData } = useGetBranch();
+  const navigate = useNavigate();
   const selectUnit =
     unitData &&
     unitData.map((item: any) => {
@@ -90,12 +91,12 @@ const Committee = () => {
     setRowId(items?.id);
   };
 
-  const handleDelete = async (rowId: string) => {
-    const response = await deleteCommittee(rowId);
-    if (response.status === httpStatus.OK) {
-      alert("Deleted");
-    }
+  const handleViewClick = () => {
+    navigate(
+      Navigation_Routes.COMMITTEE_DETAILS.replace(":committeeId", rowId)
+    );
   };
+
   return (
     <div>
       <Drawer isOpen={isOpen} setIsOpen={setIsOpen} title="Add Branch">
@@ -149,11 +150,11 @@ const Committee = () => {
         {rowId && (
           <div className="flex gap-4 absolute top-0 right-0">
             <Button
-              icon={<Delete16Filled />}
+              icon={<Eye16Filled />}
               appearance="primary"
-              onClick={() => handleDelete(rowId)}
+              onClick={handleViewClick}
             >
-              Delete
+              View
             </Button>
           </div>
         )}

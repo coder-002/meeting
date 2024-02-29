@@ -14,6 +14,7 @@ import Designation from "../pages/setup/Designation";
 import Deduction from "../pages/setup/Deduction";
 import MemberDetails from "../pages/member/MemberDetails";
 import MeetingDetails from "../pages/meeting/MeetingDetails";
+import CommitteeMember from "../pages/setup/CommitteeMember";
 
 const AppRoutes = () => {
   const routes = [
@@ -94,6 +95,14 @@ const AppRoutes = () => {
           <Setup>
             <Committee />
           </Setup>
+        </Layout>
+      ),
+    },
+    {
+      path: Navigation_Routes.COMMITTEE_DETAILS,
+      element: (
+        <Layout>
+          <CommitteeMember />
         </Layout>
       ),
     },

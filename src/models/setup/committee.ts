@@ -11,3 +11,16 @@ export interface ICommittee {
 }
 
 export type IPostCommittee = Omit<ICommittee, "id">;
+
+export interface ICommitteeMember {
+  id: number;
+  committeeId: number;
+  designationId: number;
+  memberId: number;
+  startDate: string;
+  endDate: string;
+  committee: string;
+  designation: string;
+}
+
+export type IPostCommitteeMember = Omit<ICommitteeMember, "id">;

@@ -1,9 +1,4 @@
-import {
-  QueryClient,
-  useMutation,
-  useQuery,
-  useQueryClient,
-} from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
 import instance from "../apiService";
 import { api } from "../service-api";
 import { IPostCommittee } from "../../models/setup/committee";
@@ -35,20 +30,38 @@ const useCreateCommittee = () => {
   });
 };
 
-const deleteCommittee = (id: string) => {
-  return instance.delete(api.committee.delete.replace("{id}", id));
+// const deleteCommittee = (id: string) => {
+//   return instance.delete(api.committee.delete.replace("{id}", id));
+// };
+
+// const useDeleteCommittee = () => {
+//   const queryClient = useQueryClient();
+//   return useMutation(deleteCommittee, {
+//     onSuccess: () => {
+//       queryClient.invalidateQueries(api.committee.get);
+//     },
+//     onError: (err: any) => {
+//       console.log(err);
+//     },
+//   });
+// };
+
+const getCommitteeMember = (id: string) => {
+  return instance.get(
+    api.committee.member.getMember.replace("{committeeId}", id)
+  );
 };
 
-const useDeleteCommittee = () => {
-  const queryClient = useQueryClient();
-  return useMutation(deleteCommittee, {
-    onSuccess: () => {
-      queryClient.invalidateQueries(api.committee.get);
-    },
-    onError: (err: any) => {
-      console.log(err);
-    },
-  });
+const useGetCommitteeMember = (id: string) => {
+  return useQuery(
+    [api.committee.member.getMember],
+    () => getCommitteeMember(id),
+    {
+      enabled: !!id,
+      select: (data) => data.data,
+      onError: (error) => console.log(error),
+    }
+  );
 };
 
-export { useGetCommittee, useCreateCommittee, useDeleteCommittee };
+export { useGetCommittee, useCreateCommittee, useGetCommitteeMember };

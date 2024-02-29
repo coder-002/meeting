@@ -13,7 +13,9 @@ export const api = {
   committee: {
     get: "/committee",
     post: "/committee",
-    delete: "/committee/member/{id}",
+    member: {
+      getMember: "committee/members/{committeeId}",
+    },
   },
   designation: {
     get: "/designation",
