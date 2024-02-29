@@ -26,7 +26,7 @@ const Member = () => {
   const [data, setData] = useState([]);
   const [options, setOptions] = useState<IOptions>();
   const { data: memberInit } = useMemberInit();
-  const { mutateAsync: getMember } = useGetMember();
+  const { mutateAsync: getMember, isLoading } = useGetMember();
   const { mutateAsync: addMember } = useAddMember();
   const { data: branchData } = useGetBranch();
   const { register, handleSubmit } = useForm();
@@ -75,15 +75,15 @@ const Member = () => {
     { dataKey: "address", title: "Address" },
     { dataKey: "contact", title: "Contact" },
   ];
-  const submitHandler = async (data: IPostMember) => {
-    const requestbody = { ...data };
-    const response = await addMember(requestbody);
-    if (response.status === httpStatus.OK) {
-      alert("success");
-    }
-    console.log(data);
-  };
-  if (!branchData && !memberInit) {
+  // const submitHandler = async (data: IPostMember) => {
+  //   const requestbody = { ...data };
+  //   const response = await addMember(requestbody);
+  //   if (response.status === httpStatus.OK) {
+  //     alert("success");
+  //   }
+  //   console.log(data);
+  // };
+  if (!branchData || !memberInit || isLoading) {
     return <Spinner size="large" />;
   }
   return (

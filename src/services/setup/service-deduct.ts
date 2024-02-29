@@ -8,7 +8,7 @@ const getDeduct = () => {
 };
 
 const useGetDeduct = () => {
-  return useQuery([api.designation.get], getDeduct, {
+  return useQuery([api.deduct.get], getDeduct, {
     select: (data) => data.data,
     onError: (error) => console.log(error),
   });

@@ -110,49 +110,51 @@ export const TableComp = <T extends {}>(props: Props<T>) => {
   return props.loading ? (
     <Spinner style={{ padding: "0.5em" }} />
   ) : (
-    <div>
+    <>
       <div className="flex justify-between mb-3">
         {/* <Search /> */}
         {props.btnText && (
           <Button onClick={props.onAction}>{props.btnText}</Button>
         )}
       </div>
-      <DataGrid
-        columns={cols}
-        items={props.data}
-        getRowId={(item) =>
-          props.idCol ? item[props.idCol] : props.data.indexOf(item)
-        }
-        selectionMode="single"
-        sortable
-        onSelectionChange={handleSelect}
-      >
-        <DataGridHeader>
-          <DataGridRow>
-            {({ renderHeaderCell }) => (
-              <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-            )}
-          </DataGridRow>
-        </DataGridHeader>
-        <DataGridBody<T>>
-          {({ item, rowId }) => (
-            <DataGridRow<T>
-              key={rowId}
-              selectionCell={{
-                checkboxIndicator: { "aria-label": "Select row" },
-              }}
-              // onClick={() => {
-              //   // Handle row click here
-              //   handle
-              // }}
-            >
-              {({ renderCell }) => (
-                <DataGridCell>{renderCell(item)}</DataGridCell>
+      <div className="max-h-[45rem] overflow-y-auto">
+        <DataGrid
+          columns={cols}
+          items={props.data}
+          getRowId={(item) =>
+            props.idCol ? item[props.idCol] : props.data.indexOf(item)
+          }
+          selectionMode="single"
+          sortable
+          onSelectionChange={handleSelect}
+        >
+          <DataGridHeader>
+            <DataGridRow>
+              {({ renderHeaderCell }) => (
+                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
               )}
             </DataGridRow>
-          )}
-        </DataGridBody>
-      </DataGrid>
-    </div>
+          </DataGridHeader>
+          <DataGridBody<T>>
+            {({ item, rowId }) => (
+              <DataGridRow<T>
+                key={rowId}
+                selectionCell={{
+                  checkboxIndicator: { "aria-label": "Select row" },
+                }}
+                // onClick={() => {
+                //   // Handle row click here
+                //   handle
+                // }}
+              >
+                {({ renderCell }) => (
+                  <DataGridCell>{renderCell(item)}</DataGridCell>
+                )}
+              </DataGridRow>
+            )}
+          </DataGridBody>
+        </DataGrid>
+      </div>
+    </>
   );
 };

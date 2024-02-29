@@ -14,7 +14,7 @@ import Breadcrumb from "./Breadcrumb";
 
 const Header = () => {
   return (
-    <div className="flex justify-between shadow-md">
+    <div className="flex justify-between shadow-md bg-white  ">
       <Breadcrumb />
       <Toolbar>
         <Input
