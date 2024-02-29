@@ -2,6 +2,7 @@ import { Badge, Button } from "@fluentui/react-components";
 import { TableComp } from "../../components/DataGrid/TableComp";
 import {
   useCreateCommittee,
+  useDeleteCommittee,
   useGetCommittee,
 } from "../../services/setup/service-committee";
 import { useGetUnits } from "../../services/setup/service-unit";
@@ -14,6 +15,7 @@ import Select from "../../components/form/Select";
 import { selectOptions } from "../../helpers/selectOptions";
 import httpStatus from "http-status";
 import { ICommittee, IPostCommittee } from "../../models/setup/committee";
+import { Delete16Filled } from "@fluentui/react-icons";
 
 const initialValues = {
   unitId: 0,
@@ -27,8 +29,10 @@ const initialValues = {
 };
 const Committee = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [rowId, setRowId] = useState("");
   const { data } = useGetCommittee();
   const { mutateAsync: createCommittee } = useCreateCommittee();
+  const { mutateAsync: deleteCommittee } = useDeleteCommittee();
   const { data: unitData } = useGetUnits();
   const { data: branchData } = useGetBranch();
   const selectUnit =
@@ -82,6 +86,16 @@ const Committee = () => {
     }
   };
 
+  const handleRowClick = (items: any) => {
+    setRowId(items?.id);
+  };
+
+  const handleDelete = async (rowId: string) => {
+    const response = await deleteCommittee(rowId);
+    if (response.status === httpStatus.OK) {
+      alert("Deleted");
+    }
+  };
   return (
     <div>
       <Drawer isOpen={isOpen} setIsOpen={setIsOpen} title="Add Branch">
@@ -131,12 +145,26 @@ const Committee = () => {
           </div>
         </form>
       </Drawer>
-      <TableComp
-        columns={cols}
-        data={data || []}
-        btnText="Add Committee"
-        onAction={() => setIsOpen(!isOpen)}
-      />
+      <div className="relative">
+        {rowId && (
+          <div className="flex gap-4 absolute top-0 right-0">
+            <Button
+              icon={<Delete16Filled />}
+              appearance="primary"
+              onClick={() => handleDelete(rowId)}
+            >
+              Delete
+            </Button>
+          </div>
+        )}
+        <TableComp
+          columns={cols}
+          data={data || []}
+          btnText="Add Committee"
+          onAction={() => setIsOpen(!isOpen)}
+          onSelect={handleRowClick}
+        />
+      </div>
     </div>
   );
 };
