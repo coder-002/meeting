@@ -15,6 +15,7 @@ export const api = {
     post: "/committee",
     member: {
       getMember: "committee/members/{committeeId}",
+      postMember: "/committee/member",
     },
   },
   designation: {
@@ -37,5 +38,22 @@ export const api = {
     post: "/member",
     init: "/member/init",
     getById: "member/{id}",
+    memberDetails: {
+      address: {
+        post: "/member/address",
+      },
+      contact: {
+        post: "/member/contact",
+      },
+      office: {
+        post: "/member/office",
+      },
+      id: {
+        post: "/member/kyc-id",
+      },
+      relation: {
+        post: "/member/relation",
+      },
+    },
   },
 };

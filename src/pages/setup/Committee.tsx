@@ -99,7 +99,7 @@ const Committee = () => {
 
   return (
     <div>
-      <Drawer isOpen={isOpen} setIsOpen={setIsOpen} title="Add Branch">
+      <Drawer isOpen={isOpen} setIsOpen={setIsOpen} title="Add Committee">
         <form onSubmit={handleSubmit(submitHandler)}>
           <Select
             name="unitId"

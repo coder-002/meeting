@@ -23,4 +23,7 @@ export interface ICommitteeMember {
   designation: string;
 }
 
-export type IPostCommitteeMember = Omit<ICommitteeMember, "id">;
+export type IPostCommitteeMember = Omit<
+  ICommitteeMember,
+  "id" | "committee" | "designation"
+>;

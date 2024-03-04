@@ -1,6 +1,10 @@
 import { useEffect, useState } from "react";
 import { TableComp } from "../../components/DataGrid/TableComp";
-import { useGetCommitteeMember } from "../../services/setup/service-committee";
+import {
+  useGetCommitteeMember,
+  useGetCommittee,
+  useAddCommitteeMember,
+} from "../../services/setup/service-committee";
 import { useParams } from "react-router-dom";
 import Drawer from "../../components/Drawer/Drawer";
 import Select from "../../components/form/Select";
@@ -12,15 +16,19 @@ import { Button } from "@fluentui/react-components";
 import { useGetMember } from "../../services/service-members";
 import { IMember } from "../../models/member/member";
 import { IDesignation } from "../../models/setup/designation";
+import { ICommittee } from "../../models/setup/committee";
+import httpStatus from "http-status";
 
 const CommitteeMember = () => {
-  const { id } = useParams();
+  const { committeeId: id } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const [data, setData] = useState([]);
+  const { data: committeeData } = useGetCommittee();
   const { data: committeeMember } = useGetCommitteeMember(id || "");
   const { data: designationData } = useGetDesignation();
   const { mutateAsync: getMember } = useGetMember();
-  const { register } = useForm();
+  const { mutateAsync: addMember } = useAddCommitteeMember();
+  const { register, handleSubmit, reset } = useForm();
   useEffect(() => {
     async function getData() {
       const data = await getMember({
@@ -43,6 +51,12 @@ const CommitteeMember = () => {
       return { id: item.id, name: item.memberName };
     });
 
+  const selectCommittee =
+    committeeData &&
+    committeeData.map((item: ICommittee) => {
+      return { id: item.id, name: item.committeeName };
+    });
+
   const cols = [
     { dataKey: "memberId", title: "Member Name" },
     { dataKey: "designationId", title: "Designation" },
@@ -51,10 +65,26 @@ const CommitteeMember = () => {
     { dataKey: "endDate", title: "End Date" },
   ];
 
+  const submitHandler = async (data: any) => {
+    const response = await addMember(data);
+    if (response.status == httpStatus.OK) {
+      setIsOpen(false);
+      reset();
+    }
+  };
+
   return (
     <div>
-      <Drawer isOpen={isOpen} setIsOpen={setIsOpen} title="Add Branch">
-        <form onSubmit={() => {}}>
+      <Drawer isOpen={isOpen} setIsOpen={setIsOpen} title="Add Member">
+        <form onSubmit={handleSubmit(submitHandler)}>
+          <Select
+            name="committeeId"
+            register={register}
+            label="Committee Name"
+            options={selectOptions(selectCommittee || [])}
+            placeholder="Select Committee "
+            defaultValue={id}
+          />
           <Select
             name="memberId"
             register={register}
@@ -92,7 +122,7 @@ const CommitteeMember = () => {
             <Button
               onClick={() => {
                 setIsOpen(!open);
-                // reset(initialValues);
+                reset();
               }}
             >
               Cancel

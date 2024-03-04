@@ -9,7 +9,11 @@ import {
   Subtitle1,
 } from "@fluentui/react-components";
 import { useForm } from "react-hook-form";
-import { useGetMember, useMemberInit } from "../../services/service-members";
+import {
+  useAddMember,
+  useGetMember,
+  useMemberInit,
+} from "../../services/service-members";
 import { useGetBranch } from "../../services/setup/service-branch";
 import { IBranch } from "../../models/setup/branch";
 import Select from "../../components/form/Select";
@@ -18,6 +22,8 @@ import { IOptions } from "../../models/member/member";
 import { Edit16Filled } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import { Navigation_Routes } from "../../routes/routes.constant";
+import httpStatus from "http-status";
+import Loading from "../../components/Loading";
 
 const Member = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,11 +32,12 @@ const Member = () => {
   const [updateId, setUpdateId] = useState("");
   const [options, setOptions] = useState<IOptions>();
   const { data: memberInit } = useMemberInit();
+  const { mutateAsync: addMember } = useAddMember();
   const { mutateAsync: getMember, isLoading } = useGetMember();
   // const { data: singleMember } = useGetMemberById(updateId);
   const { data: branchData } = useGetBranch();
   const navigate = useNavigate();
-  const { register } = useForm();
+  const { register, handleSubmit } = useForm();
   const selectBranch =
     branchData &&
     branchData.map((item: IBranch) => {
@@ -75,26 +82,36 @@ const Member = () => {
     { dataKey: "address", title: "Address" },
     { dataKey: "contact", title: "Contact" },
   ];
-  // const submitHandler = async (data: IPostMember) => {
-  //   const requestbody = { ...data };
-  //   const response = await addMember(requestbody);
-  //   if (response.status === httpStatus.OK) {
-  //     alert("success");
-  //   }
-  //   console.log(data);
-  // };
+  const submitHandler = async (data: any) => {
+    const requestBody = {
+      ...data,
+      memberType: "Personal",
+      branchCode: branchData.find((item: IBranch) => item.id == data.branchId)
+        ?.branchCode,
+      branchId: +data.branchId,
+      reportingBranchId: +data.reportingBranchId,
+    };
+
+    const response = await addMember(requestBody);
+    if (response.status === httpStatus.OK) {
+      alert("success");
+    }
+
+    console.log(response.status);
+  };
 
   const handleSelect = (item: any) => {
     setEdit(true);
     setUpdateId(item?.id);
   };
 
-  const handleEdit = () => {
+  const handleAddDetails = () => {
     navigate(Navigation_Routes.MEMBER_DETAILS.replace(":id", updateId));
   };
   if (!branchData || !memberInit || isLoading) {
-    return <Spinner size="large" />;
+    return <Loading />;
   }
+
   return (
     <div>
       <Drawer
@@ -103,7 +120,7 @@ const Member = () => {
         title="Add member"
         size="lg"
       >
-        <form onSubmit={() => {}}>
+        <form onSubmit={handleSubmit(submitHandler)}>
           <div className=" flex flex-col gap-3 mt-3">
             <div className="grid lg:grid-cols-2 md:grid-cols-1">
               <div>
@@ -126,10 +143,26 @@ const Member = () => {
                   required
                   label="Account Number"
                 />
+                <Input
+                  name="introducedOn"
+                  register={register}
+                  required
+                  label="Introduced On"
+                  type="date"
+                />
                 <Select
                   name="branchId"
                   register={register}
                   label="Branch Name"
+                  options={selectOptions(selectBranch || [])}
+                  placeholder="Select Branch Name"
+                  required
+                />
+
+                <Select
+                  name="reportingBranchId"
+                  register={register}
+                  label="Reporting Branch"
                   options={selectOptions(selectBranch || [])}
                   placeholder="Select Branch Name"
                   required
@@ -209,6 +242,14 @@ const Member = () => {
                   required
                   label="PAN No."
                 />
+                <Select
+                  name="profileRisk"
+                  register={register}
+                  label="Profile Risk"
+                  options={selectOptions(options?.riskCategoryTypes || [])}
+                  placeholder="Please select profile risk"
+                  required
+                />
               </div>
             </div>
             <Divider />
@@ -227,9 +268,9 @@ const Member = () => {
             <Button
               icon={<Edit16Filled />}
               appearance="primary"
-              onClick={handleEdit}
+              onClick={handleAddDetails}
             >
-              Edit
+              Add Details
             </Button>
           </div>
         )}

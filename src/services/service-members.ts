@@ -29,6 +29,18 @@ const addMember = (member: IPostMember) => {
   return instance.post(api.member.post, member);
 };
 
+// const useAddMember = () => {
+//   const queryClient = useQueryClient();
+//   return useMutation(addMember, {
+//     onSuccess: () => {
+//       // queryClient.invalidateQueries(api.member.getMember);
+//       console.log("success");
+//     },
+//     onError: (e) => {
+//       console.log(e);
+//     },
+//   });
+// };
 const useAddMember = () => {
   const queryClient = useQueryClient();
   return useMutation(addMember, {

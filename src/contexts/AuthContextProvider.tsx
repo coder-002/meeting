@@ -2,6 +2,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 import { isRunningOnLocalhost } from "../helpers/urlHelper";
 import { redirectToLogin } from "../services/authService";
 import { get } from "../services/apiService";
+import Loading from "../components/Loading";
 
 type AuthContextProps = {};
 
@@ -45,7 +46,7 @@ const AuthContextProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
   return (
     <AuthContext.Provider value={isAuthorized}>
-      {isAuthorized ? children : "Loading..."}
+      {isAuthorized ? children : <Loading />}
     </AuthContext.Provider>
   );
 };

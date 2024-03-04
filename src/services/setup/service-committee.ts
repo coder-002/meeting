@@ -1,7 +1,10 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import instance from "../apiService";
 import { api } from "../service-api";
-import { IPostCommittee } from "../../models/setup/committee";
+import {
+  IPostCommittee,
+  IPostCommitteeMember,
+} from "../../models/setup/committee";
 
 const getCommittee = () => {
   return instance.get(api.committee.get);
@@ -64,4 +67,24 @@ const useGetCommitteeMember = (id: string) => {
   );
 };
 
-export { useGetCommittee, useCreateCommittee, useGetCommitteeMember };
+const addCommitteeMember = (committeeMember: IPostCommitteeMember) => {
+  return instance.post(api.committee.member.postMember, committeeMember);
+};
+
+const useAddCommitteeMember = () => {
+  const queryClient = useQueryClient();
+  return useMutation(addCommitteeMember, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(api.committee.member.getMember);
+    },
+    onError: (e) => {
+      console.log(e);
+    },
+  });
+};
+export {
+  useGetCommittee,
+  useCreateCommittee,
+  useGetCommitteeMember,
+  useAddCommitteeMember,
+};

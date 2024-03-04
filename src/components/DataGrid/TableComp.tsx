@@ -9,10 +9,10 @@ import {
   DataGridBody,
   DataGridCell,
   OnSelectionChangeData,
-  Spinner,
   Button,
 } from "@fluentui/react-components";
 import { ReactNode, useEffect, useState } from "react";
+import Loading from "../Loading";
 
 export interface DataGridCol<T> {
   dataKey: keyof T;
@@ -108,7 +108,7 @@ export const TableComp = <T extends {}>(props: Props<T>) => {
   };
 
   return props.loading ? (
-    <Spinner style={{ padding: "0.5em" }} />
+    <Loading />
   ) : (
     <>
       <div className="flex justify-between mb-3">

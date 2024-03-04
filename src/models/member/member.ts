@@ -33,6 +33,7 @@ export type IPostMember = {
   dobNp: string;
   maritalStatus: string;
   pan: string;
+  profileRisk: string;
 };
 
 export interface IOptions {
@@ -46,6 +47,7 @@ export interface IOptions {
   religionTypes: ReligionType[];
   idTypes: IdType[];
   ethnicGroupTypes: EthnicGroupType[];
+  riskCategoryTypes: ProfileRiskType[];
 }
 
 export interface PanType {
@@ -94,6 +96,11 @@ export interface IdType {
 }
 
 export interface EthnicGroupType {
+  id: number;
+  name: string;
+}
+
+export interface ProfileRiskType {
   id: number;
   name: string;
 }

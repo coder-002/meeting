@@ -5,7 +5,7 @@ import {
   useDeleteMeeting,
   useGetMeeting,
 } from "../../services/service-meeting";
-import { Badge, Button, Spinner } from "@fluentui/react-components";
+import { Badge, Button } from "@fluentui/react-components";
 import { useGetUnits } from "../../services/setup/service-unit";
 import { IUnit } from "../../models/setup/unit";
 import { useGetCommittee } from "../../services/setup/service-committee";
@@ -22,6 +22,7 @@ import httpStatus from "http-status";
 import { Delete16Filled, Eye16Filled } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import { Navigation_Routes } from "../../routes/routes.constant";
+import Loading from "../../components/Loading";
 
 const initialValues = {
   branchId: 0,
@@ -164,7 +165,7 @@ const Meeting = () => {
   };
 
   if (!unitData || !committeData || !branchData) {
-    return <Spinner size="large" />;
+    return <Loading />;
   }
 
   return (
