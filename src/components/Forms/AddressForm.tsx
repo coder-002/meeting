@@ -185,7 +185,7 @@ const AddressForm = ({ id }: { id: string }) => {
       </div>
       <Divider />
       <div className="mt-3 flex justify-end gap-4">
-        <Button appearance="primary" type="submit">
+        <Button appearance="primary" type="submit" >
           Save
         </Button>
         <Button>Cancel</Button>

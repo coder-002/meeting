@@ -4,6 +4,7 @@ import {
   useGetCommitteeMember,
   useGetCommittee,
   useAddCommitteeMember,
+  useDeleteCommitteeMember,
 } from "../../services/setup/service-committee";
 import { useParams } from "react-router-dom";
 import Drawer from "../../components/Drawer/Drawer";
@@ -18,14 +19,17 @@ import { IMember } from "../../models/member/member";
 import { IDesignation } from "../../models/setup/designation";
 import { ICommittee } from "../../models/setup/committee";
 import httpStatus from "http-status";
+import { Delete16Filled } from "@fluentui/react-icons";
 
 const CommitteeMember = () => {
   const { committeeId: id } = useParams();
   const [isOpen, setIsOpen] = useState(false);
+  const [view, setView] = useState("");
   const [data, setData] = useState([]);
   const { data: committeeData } = useGetCommittee();
   const { data: committeeMember } = useGetCommitteeMember(id || "");
   const { data: designationData } = useGetDesignation();
+  const { mutateAsync: deleteCommitteeMember } = useDeleteCommitteeMember();
   const { mutateAsync: getMember } = useGetMember();
   const { mutateAsync: addMember } = useAddCommitteeMember();
   const { register, handleSubmit, reset } = useForm();
@@ -72,6 +76,16 @@ const CommitteeMember = () => {
       reset();
     }
   };
+  const handleRowClick = (items: any) => {
+    setView(items?.id);
+  };
+
+  const handleDelete = async (view: string) => {
+    const response = await deleteCommitteeMember(view);
+    if (response.status === httpStatus.OK) {
+      alert("Deleted");
+    }
+  };
 
   return (
     <div>
@@ -84,6 +98,7 @@ const CommitteeMember = () => {
             options={selectOptions(selectCommittee || [])}
             placeholder="Select Committee "
             defaultValue={id}
+            disabled
           />
           <Select
             name="memberId"
@@ -130,13 +145,26 @@ const CommitteeMember = () => {
           </div>
         </form>
       </Drawer>
-      <TableComp
-        columns={cols}
-        data={committeeMember || []}
-        btnText="Add Member"
-        onAction={() => setIsOpen(!isOpen)}
-        onSelect={() => {}}
-      />
+      <div className="relative">
+        {view && (
+          <div className="flex gap-4 absolute top-0 right-0">
+            <Button
+              icon={<Delete16Filled />}
+              appearance="primary"
+              onClick={() => handleDelete(view)}
+            >
+              Delete
+            </Button>
+          </div>
+        )}
+        <TableComp
+          columns={cols}
+          data={committeeMember || []}
+          btnText="Add Member"
+          onAction={() => setIsOpen(!isOpen)}
+          onSelect={handleRowClick}
+        />
+      </div>
     </div>
   );
 };
