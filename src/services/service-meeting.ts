@@ -1,7 +1,8 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import instance from "./apiService";
 import { api } from "./service-api";
-import { IMeeting, IPostMeeting } from "../models/meeting";
+import { IMeeting, IPostMeeting, IPostParticipants } from "../models/meeting";
+import Participants from "../pages/meeting/Participants";
 
 const getMeeting = () => {
   return instance.get(api.meeting.get);
@@ -58,4 +59,73 @@ const useApproveMeeting = () => {
   });
 };
 
-export { useGetMeeting, useCreateMeeting, useDeleteMeeting, useApproveMeeting };
+const getParticipants = (id: string) => {
+  return instance.get(api.meeting.participants.get.replace("{meetingId}", id));
+};
+
+const useGetPartipants = (id: string) => {
+  return useQuery([api.meeting.participants.get], () => getParticipants(id), {
+    enabled: !!id,
+    select: (data) => data.data,
+    onError: (error) => console.log(error),
+  });
+};
+
+// const addParticipant = (
+//   participants: IPostParticipants & { meetingId: string }
+// ) => {
+//   return instance.post(
+//     api.meeting.participants.post.replace(
+//       "{meetingId}",
+//       participants.meetingId
+//     ),
+//     participants
+//   );
+// };
+
+// const useAddParticipant = () => {
+//   const queryClient = useQueryClient();
+//   return useMutation(addParticipant, {
+//     onSuccess: () => {
+//       queryClient.invalidateQueries(api.meeting.participants.get);
+//     },
+//     onError: (e) => {
+//       console.log(e);
+//     },
+//   });
+// };
+
+const addParticipant = (participants: IPostParticipants[]) => {
+  const requests = participants.map((participant) =>
+    instance.post(
+      api.meeting.participants.post.replace(
+        "{meetingId}",
+        participant.meetingId.toString()
+      ),
+      participant
+    )
+  );
+
+  return Promise.all(requests);
+};
+
+const useAddParticipant = () => {
+  const queryClient = useQueryClient();
+  return useMutation(addParticipant, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(api.meeting.participants.get);
+    },
+    onError: (e) => {
+      console.log(e);
+    },
+  });
+};
+
+export {
+  useGetMeeting,
+  useCreateMeeting,
+  useDeleteMeeting,
+  useApproveMeeting,
+  useGetPartipants,
+  useAddParticipant,
+};

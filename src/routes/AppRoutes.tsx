@@ -15,6 +15,8 @@ import Deduction from "../pages/setup/Deduction";
 import MemberDetails from "../pages/member/MemberDetails";
 import MeetingDetails from "../pages/meeting/MeetingDetails";
 import CommitteeMember from "../pages/setup/CommitteeMember";
+import Participants from "../pages/meeting/Participants";
+import Profile from "../pages/Profile";
 
 const AppRoutes = () => {
   const routes = [
@@ -23,6 +25,14 @@ const AppRoutes = () => {
       element: (
         <Layout>
           <Dashboard />
+        </Layout>
+      ),
+    },
+    {
+      path: Navigation_Routes.PROFILE,
+      element: (
+        <Layout>
+          <Profile />
         </Layout>
       ),
     },
@@ -39,6 +49,14 @@ const AppRoutes = () => {
       element: (
         <Layout>
           <MeetingDetails />
+        </Layout>
+      ),
+    },
+    {
+      path: Navigation_Routes.PARTICIPANTS_DETAILS,
+      element: (
+        <Layout>
+          <Participants />
         </Layout>
       ),
     },

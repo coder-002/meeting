@@ -28,7 +28,7 @@ const Breadcrumb = () => {
         <Menu />
         <ToolbarDivider />
         <strong>{menuName}</strong>
-        <ToolbarDivider />
+        {/* <ToolbarDivider /> */}
       </div>
       <FluentBreadcrumb>
         {breadCrumb.map((x) => (

@@ -13,4 +13,6 @@ export const Navigation_Routes = {
   MEMBER_DETAILS: "/member/:id",
   MEETING_DETAILS: "/Meeting/:id",
   COMMITTEE_DETAILS: "/committee/members/:committeeId",
+  PARTICIPANTS_DETAILS: "/meeting/participants/:meetingId",
+  PROFILE: "/profile",
 };

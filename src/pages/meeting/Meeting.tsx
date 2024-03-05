@@ -19,7 +19,11 @@ import { selectOptions } from "../../helpers/selectOptions";
 import { IBranch } from "../../models/setup/branch";
 import { IMeeting, IPostMeeting } from "../../models/meeting";
 import httpStatus from "http-status";
-import { Delete16Filled, Eye16Filled } from "@fluentui/react-icons";
+import {
+  Delete16Filled,
+  Eye16Filled,
+  PeopleCommunity16Filled,
+} from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import { Navigation_Routes } from "../../routes/routes.constant";
 import Loading from "../../components/Loading";
@@ -164,6 +168,12 @@ const Meeting = () => {
     }
   };
 
+  const handleParticipants = () => {
+    navigate(
+      Navigation_Routes.PARTICIPANTS_DETAILS.replace(":meetingId", view)
+    );
+  };
+
   if (!unitData || !committeData || !branchData) {
     return <Loading />;
   }
@@ -231,6 +241,13 @@ const Meeting = () => {
               onClick={handleView}
             >
               View
+            </Button>
+            <Button
+              icon={<PeopleCommunity16Filled />}
+              appearance="primary"
+              onClick={handleParticipants}
+            >
+              Participants
             </Button>
             <Button
               icon={<Delete16Filled />}

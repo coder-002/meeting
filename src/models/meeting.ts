@@ -10,3 +10,12 @@ export interface IMeeting {
 }
 
 export type IPostMeeting = Omit<IMeeting, "id">;
+
+export interface IParticipants {
+  id: number;
+  meetingId: number;
+  memberId: number;
+  attended: boolean;
+}
+
+export type IPostParticipants = Omit<IParticipants, "id">;

@@ -4,13 +4,9 @@ import {
   ToolbarButton,
   ToolbarDivider,
 } from "@fluentui/react-components";
-import {
-  Alert24Regular,
-  Search16Regular,
-  SignOut24Regular,
-} from "@fluentui/react-icons";
-import { logOut } from "../../services/authService";
+import { Alert24Regular, Search16Regular } from "@fluentui/react-icons";
 import Breadcrumb from "./Breadcrumb";
+import User from "./User";
 
 const Header = () => {
   return (
@@ -26,11 +22,12 @@ const Header = () => {
         <ToolbarDivider />
         <ToolbarButton icon={<Alert24Regular />}></ToolbarButton>
         <ToolbarDivider />
-        <ToolbarButton
+        {/* <ToolbarButton
           style={{ color: "#003060" }}
           icon={<SignOut24Regular />}
           onClick={logOut}
-        ></ToolbarButton>
+        ></ToolbarButton> */}
+        <User />
       </Toolbar>
     </div>
   );
