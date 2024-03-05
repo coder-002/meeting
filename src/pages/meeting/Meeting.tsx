@@ -27,6 +27,7 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Navigation_Routes } from "../../routes/routes.constant";
 import Loading from "../../components/Loading";
+import { useToast } from "../../contexts/ToastConextProvider";
 
 const initialValues = {
   branchId: 0,
@@ -50,6 +51,7 @@ const Meeting = () => {
     defaultValues: initialValues,
   });
   const navigate = useNavigate();
+  const { notifyError, notifySuccess } = useToast();
 
   const selectUnit =
     unitData &&
@@ -152,7 +154,8 @@ const Meeting = () => {
     if (response.status == httpStatus.OK) {
       setIsOpen(false);
       reset(initialValues);
-    }
+      notifySuccess("Meeting Created Successfully");
+    } else notifyError("Meeting Creation Failed");
   };
 
   const handleRowClick = (items: any) => {
@@ -164,7 +167,7 @@ const Meeting = () => {
   const handleDelete = async (view: string) => {
     const response = await deleteMeeting(view);
     if (response.status === httpStatus.OK) {
-      alert("Deleted");
+      notifySuccess("Deleted Successfully");
     }
   };
 

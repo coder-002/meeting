@@ -39,6 +39,7 @@ export const api = {
     },
   },
   member: {
+    getAllMember: "/member/all",
     getMember: "/member/page",
     post: "/member",
     init: "/member/init",

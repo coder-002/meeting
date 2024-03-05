@@ -64,6 +64,16 @@ const useGetMemberById = (id: string) => {
   });
 };
 
+const getAllMember = () => {
+  return instance.get(api.member.getAllMember);
+};
+
+const useGetAllMember = () => {
+  return useQuery([api.member.getAllMember], getAllMember, {
+    select: (data) => data.data,
+    onError: (error) => console.log(error),
+  });
+};
 const memberInit = () => {
   return instance.get(api.member.init);
 };
@@ -74,4 +84,10 @@ const useMemberInit = () => {
     onError: (error) => console.log(error),
   });
 };
-export { useGetMember, useAddMember, useMemberInit, useGetMemberById };
+export {
+  useGetMember,
+  useAddMember,
+  useMemberInit,
+  useGetMemberById,
+  useGetAllMember,
+};

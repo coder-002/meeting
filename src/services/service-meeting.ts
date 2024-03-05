@@ -1,8 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import instance from "./apiService";
 import { api } from "./service-api";
-import { IMeeting, IPostMeeting, IPostParticipants } from "../models/meeting";
-import Participants from "../pages/meeting/Participants";
+import { IPostMeeting, IPostParticipants } from "../models/meeting";
 
 const getMeeting = () => {
   return instance.get(api.meeting.get);

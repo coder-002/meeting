@@ -12,9 +12,10 @@ import Select from "../../components/form/Select";
 import { useGetUnits } from "../../services/setup/service-unit";
 import { selectOptions } from "../../helpers/selectOptions";
 import httpStatus from "http-status";
+import { IUnit } from "../../models/setup/unit";
+import { useToast } from "../../contexts/ToastConextProvider";
+import Loading from "../../components/Loading";
 import { IPostBranch } from "../../models/setup/branch";
-import { branchSchema } from "../../schema/setup/setupSchema";
-import { yupResolver } from "@hookform/resolvers/yup";
 
 const initialValues = {
   orgUnitId: 0,
@@ -28,17 +29,17 @@ const initialValues = {
 const Branch = () => {
   const { data } = useGetBranch();
   const { data: unitData } = useGetUnits();
-  const { mutateAsync: createBranch } = useCreateBranch();
+  const { mutateAsync: addBranch } = useCreateBranch();
   const [isOpen, setIsOpen] = useState(false);
+  const { notifySuccess, notifyError } = useToast();
   const selectUnit =
     unitData &&
-    unitData.map((item: any) => {
+    unitData.map((item: IUnit) => {
       return { id: item.id, name: item.unitName };
     });
 
-  const { register, handleSubmit, reset } = useForm({
+  const { register, handleSubmit, reset } = useForm<typeof initialValues>({
     defaultValues: initialValues,
-    resolver: yupResolver(branchSchema),
   });
 
   const cols = [
@@ -79,68 +80,66 @@ const Branch = () => {
   ];
 
   const submitHandler = async (data: IPostBranch) => {
-    const response = await createBranch({
+    const response = await addBranch({
       ...data,
-      orgUnitName: unitData.find((item: any) => item?.id == data?.orgUnitId)
+      orgUnitName: unitData.find((item: IUnit) => item?.id == data?.orgUnitId)
         ?.unitName,
       orgUnitId: +data.orgUnitId,
       isActive: true,
     });
-    if (response.status === httpStatus.OK) {
+    if (response.status == httpStatus.OK) {
+      notifySuccess("Branch created Successfully");
       setIsOpen(false);
       reset(initialValues);
-    }
+    } else notifyError("Branch creation Failed");
   };
+
+  if (!unitData || !data) {
+    return <Loading />;
+  }
   return (
     <div>
       <Drawer isOpen={isOpen} setIsOpen={setIsOpen} title="Add Branch">
         <form onSubmit={handleSubmit(submitHandler)}>
-          <div>
-            <Input
-              name="branchCode"
-              register={register}
-              label="Branch Code"
-              required
-            />
-            <Input
-              name="branchName"
-              register={register}
-              label="Branch Name"
-              required
-            />
-            <Select
-              name="orgUnitId"
-              register={register}
-              label="Unit Name"
-              options={selectOptions(selectUnit || [])}
-              placeholder="Select Unit Name"
-            />
-            <Input
-              name="address"
-              register={register}
-              label="Address"
-              required
-            />
-            <Input
-              name="contactNumber"
-              register={register}
-              label="Contact Number"
-              required
-            />
+          <Input
+            name="branchCode"
+            register={register}
+            label="Branch Code"
+            required
+          />
+          <Input
+            name="branchName"
+            register={register}
+            label="Branch Name"
+            required
+          />
+          <Select
+            name="orgUnitId"
+            register={register}
+            label="Unit Name"
+            options={selectOptions(selectUnit || [])}
+            placeholder="Select Unit Name"
+          />
+          <Input name="address" register={register} label="Address" required />
+          <Input
+            name="contactNumber"
+            register={register}
+            label="Contact Number"
+            required
+          />
 
-            <div className=" flex gap-3 mt-3">
-              <Button appearance="primary" type="submit">
-                Create
-              </Button>
-              <Button
-                onClick={() => {
-                  setIsOpen(!open);
-                  reset(initialValues);
-                }}
-              >
-                Cancel
-              </Button>
-            </div>
+          <div className=" flex gap-3 mt-3">
+            <Button appearance="primary" type="submit">
+              Create
+            </Button>
+            <Button
+              onClick={() => {
+                setIsOpen(!open);
+                reset(initialValues);
+              }}
+            >
+              Cancel
+            </Button>
           </div>
         </form>
       </Drawer>

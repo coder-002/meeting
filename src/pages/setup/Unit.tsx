@@ -7,6 +7,7 @@ import Input from "../../components/form/Input";
 import { IPostUnit, IUnit } from "../../models/setup/unit";
 import { useForm } from "react-hook-form";
 import httpStatus from "http-status";
+import { useToast } from "../../contexts/ToastConextProvider";
 
 const initialValues = {
   unitName: "",
@@ -23,6 +24,7 @@ const Unit = () => {
   const { register, handleSubmit, reset } = useForm<IUnit>({
     defaultValues: initialValues,
   });
+  const { notifySuccess, notifyError } = useToast();
   const cols = [
     {
       dataKey: "unitName",
@@ -60,7 +62,8 @@ const Unit = () => {
     if (response.status === httpStatus.OK) {
       setIsOpen(false);
       reset(initialValues);
-    }
+      notifySuccess("Unit created Successfully");
+    } else notifyError("Unit Creation Failed");
   };
   return (
     <div>

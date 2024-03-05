@@ -10,6 +10,7 @@ import { useState } from "react";
 import { IDeduction, IPostDeduction } from "../../models/setup/deduction";
 import { useForm } from "react-hook-form";
 import httpStatus from "http-status";
+import { useToast } from "../../contexts/ToastConextProvider";
 
 const initialValues = {
   deductTitle: "",
@@ -23,6 +24,8 @@ const Deduction = () => {
   const { register, handleSubmit, reset } = useForm<IDeduction>({
     defaultValues: initialValues,
   });
+
+  const { notifyError, notifySuccess } = useToast();
   const cols = [
     { dataKey: "deductTitle", title: "Deduct Title" },
     { dataKey: "rate", title: "Rate" },
@@ -33,7 +36,8 @@ const Deduction = () => {
     if (response.status === httpStatus.OK) {
       setIsOpen(false);
       reset(initialValues);
-    }
+      notifySuccess("Deduction Rate Added Successfully");
+    } else notifyError("Deduction Rate Addition Failed");
   };
   return (
     <div>

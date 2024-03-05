@@ -17,6 +17,7 @@ import { ICommittee, IPostCommittee } from "../../models/setup/committee";
 import { Eye16Filled } from "@fluentui/react-icons/lib/fonts";
 import { useNavigate } from "react-router-dom";
 import { Navigation_Routes } from "../../routes/routes.constant";
+import { useToast } from "../../contexts/ToastConextProvider";
 
 const initialValues = {
   unitId: 0,
@@ -35,6 +36,7 @@ const Committee = () => {
   const { mutateAsync: createCommittee } = useCreateCommittee();
   const { data: unitData } = useGetUnits();
   const { data: branchData } = useGetBranch();
+  const { notifySuccess, notifyError } = useToast();
   const navigate = useNavigate();
   const selectUnit =
     unitData &&
@@ -84,7 +86,8 @@ const Committee = () => {
     if (response.status === httpStatus.OK) {
       setIsOpen(false);
       reset(initialValues);
-    }
+      notifySuccess("Committee Created Successfully");
+    } else notifyError("Committee Creation Failed");
   };
 
   const handleRowClick = (items: any) => {

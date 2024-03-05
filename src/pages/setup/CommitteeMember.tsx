@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TableComp } from "../../components/DataGrid/TableComp";
 import {
   useGetCommitteeMember,
@@ -14,7 +14,7 @@ import { useGetDesignation } from "../../services/setup/service-designation";
 import { selectOptions } from "../../helpers/selectOptions";
 import Input from "../../components/form/Input";
 import { Button } from "@fluentui/react-components";
-import { useGetMember } from "../../services/service-members";
+import { useGetAllMember } from "../../services/service-members";
 import { IMember } from "../../models/member/member";
 import { IDesignation } from "../../models/setup/designation";
 import { ICommittee } from "../../models/setup/committee";
@@ -25,33 +25,22 @@ const CommitteeMember = () => {
   const { committeeId: id } = useParams();
   const [isOpen, setIsOpen] = useState(false);
   const [view, setView] = useState("");
-  const [data, setData] = useState([]);
   const { data: committeeData } = useGetCommittee();
   const { data: committeeMember } = useGetCommitteeMember(id || "");
   const { data: designationData } = useGetDesignation();
   const { mutateAsync: deleteCommitteeMember } = useDeleteCommitteeMember();
-  const { mutateAsync: getMember } = useGetMember();
+  const { data: memberData } = useGetAllMember();
   const { mutateAsync: addMember } = useAddCommitteeMember();
   const { register, handleSubmit, reset } = useForm();
-  useEffect(() => {
-    async function getData() {
-      const data = await getMember({
-        pageNumber: 1,
-        pageSize: 100,
-        searchText: "",
-      });
-      setData(data.data.data);
-    }
-    getData();
-  }, []);
+
   const selectDesignation =
     designationData &&
     designationData.map((item: IDesignation) => {
       return { id: item.id, name: item.designationName };
     });
   const selectMember =
-    data &&
-    data.map((item: IMember) => {
+    memberData &&
+    memberData.map((item: IMember) => {
       return { id: item.id, name: item.memberName };
     });
 
@@ -70,7 +59,7 @@ const CommitteeMember = () => {
   ];
 
   const submitHandler = async (data: any) => {
-    const response = await addMember(data);
+    const response = await addMember({ ...data, committeeId: id });
     if (response.status == httpStatus.OK) {
       setIsOpen(false);
       reset();

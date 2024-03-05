@@ -2,12 +2,7 @@ import { useEffect, useState } from "react";
 import { TableComp } from "../../components/DataGrid/TableComp";
 import Drawer from "../../components/Drawer/Drawer";
 import Input from "../../components/form/Input";
-import {
-  Button,
-  Divider,
-  Spinner,
-  Subtitle1,
-} from "@fluentui/react-components";
+import { Button, Divider, Subtitle1 } from "@fluentui/react-components";
 import { useForm } from "react-hook-form";
 import {
   useAddMember,
@@ -24,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { Navigation_Routes } from "../../routes/routes.constant";
 import httpStatus from "http-status";
 import Loading from "../../components/Loading";
+import { useToast } from "../../contexts/ToastConextProvider";
 
 const Member = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -34,7 +30,6 @@ const Member = () => {
   const { data: memberInit } = useMemberInit();
   const { mutateAsync: addMember } = useAddMember();
   const { mutateAsync: getMember, isLoading } = useGetMember();
-  // const { data: singleMember } = useGetMemberById(updateId);
   const { data: branchData } = useGetBranch();
   const navigate = useNavigate();
   const { register, handleSubmit } = useForm();
@@ -43,6 +38,8 @@ const Member = () => {
     branchData.map((item: IBranch) => {
       return { id: item.id, name: item.branchName };
     });
+
+  const { notifySuccess, notifyError } = useToast();
 
   useEffect(() => {
     async function getData() {
@@ -94,10 +91,8 @@ const Member = () => {
 
     const response = await addMember(requestBody);
     if (response.status === httpStatus.OK) {
-      alert("success");
-    }
-
-    console.log(response.status);
+      notifySuccess("Member Added Successfully");
+    } else notifyError("Member  Adding Failed");
   };
 
   const handleSelect = (item: any) => {

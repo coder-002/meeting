@@ -10,6 +10,8 @@ import Input from "../../components/form/Input";
 import { useForm } from "react-hook-form";
 import { IDesignation, IPostDesignation } from "../../models/setup/designation";
 import httpStatus from "http-status";
+import { useToast } from "../../contexts/ToastConextProvider";
+import Loading from "../../components/Loading";
 
 const initialValues = {
   designationCode: "",
@@ -24,6 +26,8 @@ const Designation = () => {
   const { register, handleSubmit, reset } = useForm<IDesignation>({
     defaultValues: initialValues,
   });
+
+  const { notifyError, notifySuccess } = useToast();
   const cols = [
     { dataKey: "designationName", title: "Designation Name" },
     {
@@ -47,7 +51,8 @@ const Designation = () => {
     if (response.status === httpStatus.OK) {
       setIsOpen(false);
       reset(initialValues);
-    }
+      notifySuccess("Designation Created Successfully");
+    } else notifyError("Designation Creation Failed");
   };
 
   return (
