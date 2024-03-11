@@ -18,6 +18,7 @@ import { Eye16Filled } from "@fluentui/react-icons/lib/fonts";
 import { useNavigate } from "react-router-dom";
 import { Navigation_Routes } from "../../routes/routes.constant";
 import { useToast } from "../../contexts/ToastConextProvider";
+import Textarea from "../../components/form/TextArea";
 
 const initialValues = {
   unitId: 0,
@@ -133,7 +134,11 @@ const Committee = () => {
             label="Committee Name"
             required
           />
-          <Input name="description" register={register} label="Description" />
+          <Textarea
+            name="description"
+            register={register}
+            label="Description"
+          />
           <div className=" flex gap-3 mt-3">
             <Button appearance="primary" type="submit">
               Create
@@ -151,7 +156,7 @@ const Committee = () => {
       </Drawer>
       <div className="relative">
         {rowId && (
-          <div className="flex gap-4 absolute top-0 right-0">
+          <div className="flex gap-4 absolute top-4 right-0">
             <Button
               icon={<Eye16Filled />}
               appearance="primary"

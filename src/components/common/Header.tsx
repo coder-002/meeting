@@ -1,19 +1,12 @@
 import {
-  Button,
   Input,
   Toolbar,
   ToolbarButton,
   ToolbarDivider,
 } from "@fluentui/react-components";
-import {
-  Alert24Regular,
-  DarkTheme24Filled,
-  Search16Regular,
-} from "@fluentui/react-icons";
+import { Alert24Regular, Search16Regular } from "@fluentui/react-icons";
 import Breadcrumb from "./Breadcrumb";
 import User from "./User";
-import { useContext } from "react";
-import { ThemeContext } from "../../contexts/ThemeContextProvider";
 import ThemeSelector from "./ThemeSelector";
 
 const Header = () => {

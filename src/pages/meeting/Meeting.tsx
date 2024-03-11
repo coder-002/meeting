@@ -28,6 +28,7 @@ import { useNavigate } from "react-router-dom";
 import { Navigation_Routes } from "../../routes/routes.constant";
 import Loading from "../../components/Loading";
 import { useToast } from "../../contexts/ToastConextProvider";
+import Textarea from "../../components/form/TextArea";
 
 const initialValues = {
   branchId: 0,
@@ -220,7 +221,11 @@ const Meeting = () => {
               placeholder="Select Committee Name"
               required
             />
-            <Input name="description" register={register} label="Description" />
+            <Textarea
+              name="description"
+              register={register}
+              label="Description"
+            />
             <Input name="notes" register={register} label="Notes" />
             <div className=" flex gap-3 mt-3">
               <Button appearance="primary" type="submit">
