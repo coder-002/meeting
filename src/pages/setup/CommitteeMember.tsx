@@ -20,6 +20,7 @@ import { IDesignation } from "../../models/setup/designation";
 import { ICommittee } from "../../models/setup/committee";
 import httpStatus from "http-status";
 import { Delete16Filled } from "@fluentui/react-icons";
+import Loading from "../../components/Loading";
 
 const CommitteeMember = () => {
   const { committeeId: id } = useParams();
@@ -51,8 +52,36 @@ const CommitteeMember = () => {
     });
 
   const cols = [
-    { dataKey: "memberId", title: "Member Name" },
-    { dataKey: "designationId", title: "Designation" },
+    {
+      dataKey: "memberId",
+      title: "Member Name",
+      render: (item: any) => {
+        return (
+          <>
+            {
+              memberData?.find((member: IMember) => member.id == item?.memberId)
+                ?.memberName
+            }
+          </>
+        );
+      },
+    },
+    {
+      dataKey: "designationId",
+      title: "Designation",
+      render: (item: any) => {
+        return (
+          <>
+            {
+              designationData?.find(
+                (designation: IDesignation) =>
+                  designation.id == item?.designationId
+              )?.designationName
+            }
+          </>
+        );
+      },
+    },
     { dataKey: "committee", title: "Committee Name" },
     { dataKey: "startDate", title: "Start Date" },
     { dataKey: "endDate", title: "End Date" },
@@ -75,6 +104,9 @@ const CommitteeMember = () => {
       alert("Deleted");
     }
   };
+  if (!designationData || !memberData || !committeeData) {
+    return <Loading />;
+  }
 
   return (
     <div>
@@ -136,7 +168,7 @@ const CommitteeMember = () => {
       </Drawer>
       <div className="relative">
         {view && (
-          <div className="flex gap-4 absolute top-0 right-0">
+          <div className="flex gap-4 absolute top-4 right-0">
             <Button
               icon={<Delete16Filled />}
               appearance="primary"

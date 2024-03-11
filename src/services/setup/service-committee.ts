@@ -33,22 +33,6 @@ const useCreateCommittee = () => {
   });
 };
 
-// const deleteCommittee = (id: string) => {
-//   return instance.delete(api.committee.delete.replace("{id}", id));
-// };
-
-// const useDeleteCommittee = () => {
-//   const queryClient = useQueryClient();
-//   return useMutation(deleteCommittee, {
-//     onSuccess: () => {
-//       queryClient.invalidateQueries(api.committee.get);
-//     },
-//     onError: (err: any) => {
-//       console.log(err);
-//     },
-//   });
-// };
-
 const getCommitteeMember = (id: string) => {
   return instance.get(
     api.committee.member.getMember.replace("{committeeId}", id)
