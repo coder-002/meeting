@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import { IOptions } from "../../models/member/member";
 import { useMemberInit } from "../../services/service-members";
 import { selectOptions } from "../../helpers/selectOptions";
-import { Addresss } from "../../models/member/memberDetails";
 import { useAddAddress } from "../../services/memberDetails.ts/service-address";
 import httpStatus from "http-status";
 
@@ -25,8 +24,11 @@ const initialValues = [
     landlordContact: "",
   },
 ];
+interface Props {
+  id: string;
+}
 
-const AddressForm = ({ id }: { id: string }) => {
+const AddressForm = ({ id }: Props) => {
   const { register, handleSubmit } = useForm({
     defaultValues: initialValues,
   });
@@ -38,8 +40,18 @@ const AddressForm = ({ id }: { id: string }) => {
     setOptions(memberInit?.data);
   }, [memberInit]);
 
+  const self = options?.relationTypes
+    .find((item) => item?.name === "Self")
+    ?.id.toString();
+
   const submitHandler = async (data: any) => {
-    const response = await addAddress({ profileId: +id, ...data });
+    const requestBody = await data.addresses.map((item: any) => ({
+      ...item,
+      relType: self,
+    }));
+    const response = await addAddress([
+      { profileId: +id, addresses: requestBody },
+    ]);
     if (response.status == httpStatus.OK) {
       alert("Address Added");
     }
@@ -60,15 +72,6 @@ const AddressForm = ({ id }: { id: string }) => {
           required
           placeholder="Select an address type"
         />
-        <Select
-          name={"addresses[0].relType"}
-          options={selectOptions(options?.relationTypes || [])}
-          register={register}
-          label="Relation Type"
-          required
-          placeholder="Select an realtion type"
-        />
-
         <Input
           register={register}
           label="Ward"
@@ -111,6 +114,16 @@ const AddressForm = ({ id }: { id: string }) => {
           name="addresses[0].country"
           required
         />
+        <Input
+          register={register}
+          label="Landlord"
+          name="addresses[0].landlord"
+        />
+        <Input
+          register={register}
+          label="Landlord Contact"
+          name="addresses[0].landlordContact"
+        />
       </div>
       <Subtitle2>Temporary Address</Subtitle2>
       <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 w-full">
@@ -122,14 +135,7 @@ const AddressForm = ({ id }: { id: string }) => {
           required
           placeholder="Select an address type"
         />
-        <Select
-          name={"addresses[1].relType"}
-          options={selectOptions(options?.relationTypes || [])}
-          register={register}
-          label="Relation Type"
-          required
-          placeholder="Select an realtion type"
-        />
+
         <Input
           register={register}
           label="Ward"
@@ -185,7 +191,7 @@ const AddressForm = ({ id }: { id: string }) => {
       </div>
       <Divider />
       <div className="mt-3 flex justify-end gap-4">
-        <Button appearance="primary" type="submit" >
+        <Button appearance="primary" type="submit">
           Save
         </Button>
         <Button>Cancel</Button>

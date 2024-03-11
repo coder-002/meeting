@@ -14,7 +14,7 @@ import { IBranch } from "../../models/setup/branch";
 import Select from "../../components/form/Select";
 import { selectOptions } from "../../helpers/selectOptions";
 import { IOptions } from "../../models/member/member";
-import { Edit16Filled } from "@fluentui/react-icons";
+import { ArrowLeft24Filled, Edit16Filled } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import { Navigation_Routes } from "../../routes/routes.constant";
 import httpStatus from "http-status";
@@ -109,6 +109,15 @@ const Member = () => {
 
   return (
     <div>
+      <div className="flex gap-2">
+        <Button
+          appearance="transparent"
+          type="button"
+          onClick={() => navigate(-1)}
+          icon={<ArrowLeft24Filled />}
+        />
+        <Subtitle1>Member Table</Subtitle1>
+      </div>
       <Drawer
         isOpen={isOpen}
         setIsOpen={setIsOpen}
@@ -259,7 +268,7 @@ const Member = () => {
       </Drawer>
       <div className="relative">
         {edit && (
-          <div className="flex gap-4 absolute top-0 right-0">
+          <div className="flex gap-4 absolute top-4 right-0">
             <Button
               icon={<Edit16Filled />}
               appearance="primary"

@@ -1,11 +1,15 @@
 import { ReactNode, useEffect, useState } from "react";
 import TabList from "../../components/form/TabList";
 import {
+  Button,
+  Divider,
   SelectTabData,
   SelectTabEvent,
+  Subtitle1,
   TabValue,
 } from "@fluentui/react-components";
 import {
+  ArrowLeft24Filled,
   Branch16Filled,
   Group20Filled,
   Organization16Filled,
@@ -14,11 +18,12 @@ import {
 } from "@fluentui/react-icons";
 import { TrayItemRemove20Filled } from "@fluentui/react-icons/lib/fonts";
 import { Navigation_Routes } from "../../routes/routes.constant";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const Setup = ({ children }: { children: ReactNode }) => {
   const [selectedValue, setSelectedValue] = useState<TabValue>("organization");
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const tablist = [
     {
       id: "1",
@@ -63,6 +68,7 @@ const Setup = ({ children }: { children: ReactNode }) => {
       url: Navigation_Routes.DEDUCTION,
     },
   ];
+
   useEffect(() => {
     if (!pathname) return;
     const menu = pathname.split("/")[2];
@@ -72,14 +78,18 @@ const Setup = ({ children }: { children: ReactNode }) => {
     setSelectedValue(data.value);
   };
   return (
-    <div className="flex gap-4">
-      <TabList
-        tabs={tablist}
-        onTabSelect={handleSelect}
-        selectedValue={selectedValue}
-        vertical
-      />
-      <div className="flex-1 p-4 shadow-md">{children}</div>
+    <div className="flex flex-col">
+      <div className="flex gap-4">
+        <div className="mt-8">
+          <TabList
+            tabs={tablist}
+            onTabSelect={handleSelect}
+            selectedValue={selectedValue}
+            vertical
+          />
+        </div>
+        <div className="flex-1">{children}</div>
+      </div>
     </div>
   );
 };

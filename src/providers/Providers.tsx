@@ -1,9 +1,10 @@
 import { ReactNode } from "react";
-import { FluentProvider, teamsLightTheme } from "@fluentui/react-components";
 import AuthContextProvider from "../contexts/AuthContextProvider";
 import ToastContextProvider from "../contexts/ToastConextProvider";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
+import ThemeProvider from "../contexts/ThemeContextProvider";
+
 interface Props {
   children: ReactNode;
 }
@@ -11,13 +12,13 @@ const queryClient = new QueryClient();
 const Providers = ({ children }: Props) => {
   return (
     <BrowserRouter>
-      <FluentProvider theme={teamsLightTheme}>
+      <ThemeProvider>
         <QueryClientProvider client={queryClient}>
           <AuthContextProvider>
             <ToastContextProvider>{children}</ToastContextProvider>
           </AuthContextProvider>
         </QueryClientProvider>
-      </FluentProvider>
+      </ThemeProvider>
     </BrowserRouter>
   );
 };

@@ -20,6 +20,7 @@ const OfficeForm = ({ id }: { id: string }) => {
 
   const { mutateAsync: addOffice } = useAddOffice();
   const submitHandler = async (data: Office) => {
+    console.log(data);
     const response = await addOffice({ profileId: +id, offices: [data] });
     if (response.status == httpStatus.OK) {
       alert("Office Added");

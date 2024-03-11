@@ -10,9 +10,11 @@ import {
   DataGridCell,
   OnSelectionChangeData,
   Button,
+  Input,
 } from "@fluentui/react-components";
 import { ReactNode, useEffect, useState } from "react";
 import Loading from "../Loading";
+import { Search16Regular } from "@fluentui/react-icons";
 
 export interface DataGridCol<T> {
   dataKey: keyof T;
@@ -27,8 +29,6 @@ type Props<T> = {
   idCol?: string;
   loading?: boolean;
   onSelect?: (item: T) => void;
-  onEditClick?: () => void;
-  onDeleteClick?: () => void;
   onAction?: () => void;
   btnText?: string;
 };
@@ -57,34 +57,6 @@ export const TableComp = <T extends {}>(props: Props<T>) => {
       );
     });
 
-    // {
-    //   props.actions &&
-    //     columns.push(
-    //       createTableColumn<T>({
-    //         columnId: "actions",
-    //         renderHeaderCell: () => <strong>Actions</strong>,
-    //         renderCell: () => (
-    //           <div className="flex gap-4">
-    //             <Tooltip withArrow content={"edit"} relationship="label">
-    //               <Button
-    //                 aria-label="Edit"
-    //                 icon={<BiEdit />}
-    //                 onClick={props.onEditClick}
-    //               />
-    //             </Tooltip>
-    //             <Tooltip withArrow content={"delete"} relationship="label">
-    //               <Button
-    //                 aria-label="Delete"
-    //                 icon={<FaDeleteLeft />}
-    //                 onClick={props.onDeleteClick}
-    //               />
-    //             </Tooltip>
-    //           </div>
-    //         ),
-    //       })
-    //     );
-    // }
-
     setCols(columns);
   };
 
@@ -110,14 +82,21 @@ export const TableComp = <T extends {}>(props: Props<T>) => {
   return props.loading ? (
     <Loading />
   ) : (
-    <>
-      <div className="flex justify-between mb-3">
-        {/* <Search /> */}
+    <div className="p-4 h-[50rem] overflow-hidden">
+      <div className="flex gap-4">
+        <Input
+          size="medium"
+          placeholder="Search..."
+          contentAfter={<Search16Regular />}
+          style={{ width: "300px" }}
+        />
         {props.btnText && (
-          <Button onClick={props.onAction}>{props.btnText}</Button>
+          <Button appearance="primary" onClick={props.onAction}>
+            {props.btnText}
+          </Button>
         )}
       </div>
-      <div className="max-h-[45rem] overflow-y-auto">
+      <div className="h-full overflow-y-auto mt-4">
         <DataGrid
           columns={cols}
           items={props.data}
@@ -131,30 +110,32 @@ export const TableComp = <T extends {}>(props: Props<T>) => {
           <DataGridHeader>
             <DataGridRow>
               {({ renderHeaderCell }) => (
-                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
+                <DataGridHeaderCell>
+                  <strong>{renderHeaderCell()}</strong>
+                </DataGridHeaderCell>
               )}
             </DataGridRow>
           </DataGridHeader>
-          <DataGridBody<T>>
-            {({ item, rowId }) => (
-              <DataGridRow<T>
-                key={rowId}
-                selectionCell={{
-                  checkboxIndicator: { "aria-label": "Select row" },
-                }}
-                // onClick={() => {
-                //   // Handle row click here
-                //   handle
-                // }}
-              >
-                {({ renderCell }) => (
-                  <DataGridCell>{renderCell(item)}</DataGridCell>
-                )}
-              </DataGridRow>
-            )}
-          </DataGridBody>
+          {!props.data ? (
+            ""
+          ) : (
+            <DataGridBody<T>>
+              {({ item, rowId }) => (
+                <DataGridRow<T>
+                  key={rowId}
+                  selectionCell={{
+                    checkboxIndicator: { "aria-label": "Select row" },
+                  }}
+                >
+                  {({ renderCell }) => (
+                    <DataGridCell>{renderCell(item)}</DataGridCell>
+                  )}
+                </DataGridRow>
+              )}
+            </DataGridBody>
+          )}
         </DataGrid>
       </div>
-    </>
+    </div>
   );
 };

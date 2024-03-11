@@ -5,7 +5,7 @@ import {
   useDeleteMeeting,
   useGetMeeting,
 } from "../../services/service-meeting";
-import { Badge, Button } from "@fluentui/react-components";
+import { Badge, Button, Subtitle1 } from "@fluentui/react-components";
 import { useGetUnits } from "../../services/setup/service-unit";
 import { IUnit } from "../../models/setup/unit";
 import { useGetCommittee } from "../../services/setup/service-committee";
@@ -20,9 +20,9 @@ import { IBranch } from "../../models/setup/branch";
 import { IMeeting, IPostMeeting } from "../../models/meeting";
 import httpStatus from "http-status";
 import {
+  ArrowLeft24Filled,
   Delete16Filled,
   Eye16Filled,
-  PeopleCommunity16Filled,
 } from "@fluentui/react-icons";
 import { useNavigate } from "react-router-dom";
 import { Navigation_Routes } from "../../routes/routes.constant";
@@ -171,21 +171,31 @@ const Meeting = () => {
     }
   };
 
-  const handleParticipants = () => {
-    navigate(
-      Navigation_Routes.PARTICIPANTS_DETAILS.replace(":meetingId", view)
-    );
-  };
-
   if (!unitData || !committeData || !branchData) {
     return <Loading />;
   }
 
   return (
     <div>
+      <div className="flex gap-2">
+        <Button
+          appearance="transparent"
+          type="button"
+          onClick={() => navigate(-1)}
+          icon={<ArrowLeft24Filled />}
+        />
+        <Subtitle1>Meeting Table</Subtitle1>
+      </div>
       <Drawer isOpen={isOpen} setIsOpen={setIsOpen} title="Add Meeting">
         <form onSubmit={handleSubmit(onSubmitHandler)}>
           <div>
+            <Input
+              name="meetingCode"
+              register={register}
+              label="Meeting Code"
+              required
+            />
+            <Input name="topic" register={register} label="Topic" required />
             <Select
               name="branchId"
               register={register}
@@ -202,14 +212,6 @@ const Meeting = () => {
               placeholder="Select Unit Name"
               required
             />
-            <Input
-              name="meetingCode"
-              register={register}
-              label="Meeting Code"
-              required
-            />
-            <Input name="topic" register={register} label="Topic" required />
-            <Input name="description" register={register} label="Description" />
             <Select
               name="committeeId"
               register={register}
@@ -218,6 +220,7 @@ const Meeting = () => {
               placeholder="Select Committee Name"
               required
             />
+            <Input name="description" register={register} label="Description" />
             <Input name="notes" register={register} label="Notes" />
             <div className=" flex gap-3 mt-3">
               <Button appearance="primary" type="submit">
@@ -237,7 +240,7 @@ const Meeting = () => {
       </Drawer>
       <div className="relative">
         {view && (
-          <div className="flex gap-4 absolute top-0 right-0">
+          <div className="flex gap-4 absolute top-4 right-0">
             <Button
               icon={<Eye16Filled />}
               appearance="primary"
@@ -245,13 +248,7 @@ const Meeting = () => {
             >
               View
             </Button>
-            <Button
-              icon={<PeopleCommunity16Filled />}
-              appearance="primary"
-              onClick={handleParticipants}
-            >
-              Participants
-            </Button>
+
             <Button
               icon={<Delete16Filled />}
               appearance="primary"
@@ -259,6 +256,15 @@ const Meeting = () => {
             >
               Delete
             </Button>
+            {/* <Modal
+              btnText="Delete"
+              title="Delete"
+              submitButtonText="Submit"
+              resetButtonText="Cancel"
+              submitHandler={handleSubmit(submitHandler)}
+            >
+              <p>hello</p>
+            </Modal> */}
           </div>
         )}
         <TableComp

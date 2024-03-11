@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import instance from "./apiService";
 import { api } from "./service-api";
-import { IPostMeeting, IPostParticipants } from "../models/meeting";
+import { IParticipants, IPostMeeting } from "../models/meeting";
 
 const getMeeting = () => {
   return instance.get(api.meeting.get);
@@ -70,42 +70,12 @@ const useGetPartipants = (id: string) => {
   });
 };
 
-// const addParticipant = (
-//   participants: IPostParticipants & { meetingId: string }
-// ) => {
-//   return instance.post(
-//     api.meeting.participants.post.replace(
-//       "{meetingId}",
-//       participants.meetingId
-//     ),
-//     participants
-//   );
-// };
-
-// const useAddParticipant = () => {
-//   const queryClient = useQueryClient();
-//   return useMutation(addParticipant, {
-//     onSuccess: () => {
-//       queryClient.invalidateQueries(api.meeting.participants.get);
-//     },
-//     onError: (e) => {
-//       console.log(e);
-//     },
-//   });
-// };
-
-const addParticipant = (participants: IPostParticipants[]) => {
-  const requests = participants.map((participant) =>
-    instance.post(
-      api.meeting.participants.post.replace(
-        "{meetingId}",
-        participant.meetingId.toString()
-      ),
-      participant
-    )
+const addParticipant = (participants: IParticipants) => {
+  const { meetingId, ...rest } = participants;
+  return instance.post(
+    api.meeting.participants.post.replace("{meetingId}", meetingId),
+    rest
   );
-
-  return Promise.all(requests);
 };
 
 const useAddParticipant = () => {

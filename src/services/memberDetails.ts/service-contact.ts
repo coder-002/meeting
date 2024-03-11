@@ -3,7 +3,7 @@ import { IContact } from "../../models/member/memberDetails";
 import instance from "../apiService";
 import { api } from "../service-api";
 
-const addContact = (contact: IContact) => {
+const addContact = (contact: IContact[]) => {
   return instance.post(api.member.memberDetails.contact.post, contact);
 };
 

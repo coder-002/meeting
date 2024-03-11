@@ -3,7 +3,7 @@ import { IAddress } from "../../models/member/memberDetails";
 import instance from "../apiService";
 import { api } from "../service-api";
 
-const addAddresss = (address: IAddress) => {
+const addAddresss = (address: IAddress[]) => {
   return instance.post(api.member.memberDetails.address.post, address);
 };
 

@@ -34,8 +34,8 @@ export const api = {
     patch: "/Meeting/{id}",
     approve: "/Meeting/Approve/{meetingId}",
     participants: {
-      get: "/Participant/{meetingId}",
-      post: "/Participant/{meetingId}",
+      get: "/Participant/{meetingId}/participants",
+      post: "/Participant/{meetingId}/participant",
     },
   },
   member: {

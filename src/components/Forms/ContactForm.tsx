@@ -9,14 +9,17 @@ import { useMemberInit } from "../../services/service-members";
 import { selectOptions } from "../../helpers/selectOptions";
 import { useAddContact } from "../../services/memberDetails.ts/service-contact";
 import httpStatus from "http-status";
+import { Dismiss16Filled } from "@fluentui/react-icons";
 
 const initialValues = {
   type: "",
-  relType: "",
+  relType: "Self",
   value: "",
 };
-
 const ContactForm = ({ id }: { id: string }) => {
+  const [options, setOptions] = useState<IOptions>();
+  const { data: memberInit } = useMemberInit();
+  const { mutateAsync: addContact } = useAddContact();
   const { register, control, handleSubmit } = useForm({
     defaultValues: {
       contacts: [initialValues],
@@ -26,19 +29,26 @@ const ContactForm = ({ id }: { id: string }) => {
     control,
     name: "contacts",
   });
-  const [options, setOptions] = useState<IOptions>();
-  const { data: memberInit } = useMemberInit();
-  const { mutateAsync: addContact } = useAddContact();
 
   useEffect(() => {
     setOptions(memberInit?.data);
   }, [memberInit]);
 
+  const self = options?.relationTypes
+    .find((item) => item?.name === "Self")
+    ?.id.toString();
+
   const submitHandler = async (data: any) => {
-    const response = await addContact({
-      profileId: +id,
-      ...data,
-    });
+    const requestBody = await data.contacts.map((item: any) => ({
+      ...item,
+      relType: "Self",
+    }));
+    const response = await addContact([
+      {
+        profileId: +id,
+        contacts: requestBody,
+      },
+    ]);
     if (response.status == httpStatus.OK) {
       alert("Contact Added");
     }
@@ -49,8 +59,8 @@ const ContactForm = ({ id }: { id: string }) => {
       <div>
         {fields.map((item, index) => {
           return (
-            <div>
-              <div key={item.id} className="grid grid-cols-4 gap-4 ">
+            <div key={item.id}>
+              <div className="grid lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 gap-4 w-full">
                 <Select
                   name={`contacts[${index}].type`}
                   options={selectOptions(options?.contactTypes || [])}
@@ -59,14 +69,6 @@ const ContactForm = ({ id }: { id: string }) => {
                   label="Type"
                   required
                 />
-                <Select
-                  name={"relType"}
-                  options={selectOptions(options?.relationTypes || [])}
-                  register={register}
-                  label="Relation Type"
-                  required
-                  placeholder="Select an realtion type"
-                />
                 <Input
                   name={`contacts[${index}].value`}
                   register={register}
@@ -74,9 +76,12 @@ const ContactForm = ({ id }: { id: string }) => {
                   required
                 />
                 <div className=" flex items-end">
-                  <Button type="button" onClick={() => remove(index)}>
-                    Delete
-                  </Button>
+                  <Button
+                    appearance="transparent"
+                    type="button"
+                    onClick={() => remove(index)}
+                    icon={<Dismiss16Filled />}
+                  />
                 </div>
               </div>
             </div>
@@ -86,7 +91,7 @@ const ContactForm = ({ id }: { id: string }) => {
       <div className=" flex mt-4 justify-between">
         <Button
           type="button"
-          onClick={() => append({ type: "", relType: "", value: "" })}
+          onClick={() => append({ type: "", relType: "Self", value: "" })}
         >
           + Add more
         </Button>

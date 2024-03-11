@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { TableComp } from "../../components/DataGrid/TableComp";
 import Drawer from "../../components/Drawer/Drawer";
 import { Badge, Button } from "@fluentui/react-components";
@@ -6,40 +5,61 @@ import { useForm } from "react-hook-form";
 import Select from "../../components/form/Select";
 import { selectOptions } from "../../helpers/selectOptions";
 import {
+  useAddParticipant,
   useGetMeeting,
   useGetPartipants,
 } from "../../services/service-meeting";
-import { IMeeting } from "../../models/meeting";
-import { useGetMember } from "../../services/service-members";
+import { useGetAllMember } from "../../services/service-members";
 import { IMember } from "../../models/member/member";
+import { useState } from "react";
+import httpStatus from "http-status";
 import Loading from "../../components/Loading";
-import { useParams } from "react-router-dom";
+import { IMeeting } from "../../models/meeting";
 
-const Participants = () => {
-  const { meetingId: id } = useParams();
-  const [data, setData] = useState([]);
+const Participants = ({ id }: { id: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { data: meetingData } = useGetMeeting();
-  const { mutateAsync: getMember, isLoading } = useGetMember();
+  // const { mutateAsync: getMember, isLoading } = useGetMember();
+  const { data: memberData } = useGetAllMember();
   const { data: participants } = useGetPartipants(id || "");
+  const { mutateAsync: addParticipants } = useAddParticipant();
   const { register, handleSubmit } = useForm();
-  const selectMeeting =
-    meetingData &&
-    meetingData.map((meeting: IMeeting) => {
-      return { id: meeting.id, name: meeting.topic };
+
+  const selectMember =
+    memberData &&
+    memberData.map((member: IMember) => {
+      return { id: member.id, name: member.memberName };
     });
 
-  const selectMember = data.map((member: IMember) => {
-    return { id: member.id, name: member.memberName };
-  });
   const cols = [
     {
       dataKey: "meetingId",
       title: "Meeting Topic",
+      render: (item: any) => {
+        return (
+          <>
+            {
+              meetingData?.find(
+                (meeting: IMeeting) => meeting.id == item.meetingId
+              ).topic
+            }
+          </>
+        );
+      },
     },
     {
       dataKey: "memberId",
       title: "Member Name",
+      render: (item: any) => {
+        return (
+          <>
+            {
+              memberData?.find((member: IMember) => member.id == item.memberId)
+                .memberName
+            }
+          </>
+        );
+      },
     },
     {
       dataKey: "attended",
@@ -48,31 +68,29 @@ const Participants = () => {
         return (
           <Badge
             appearance="filled"
-            color={item.attended ? "success" : "warning"}
+            color={item.attended ? "success" : "danger"}
             size="large"
           >
-            {item.attended ? "Complete" : "Process"}
+            {item.attended ? "Present" : "Absent"}
           </Badge>
         );
       },
     },
   ];
 
-  useEffect(() => {
-    async function getData() {
-      const data = await getMember({
-        pageNumber: 1,
-        pageSize: 100,
-        searchText: "",
-      });
-      setData(data.data.data);
+  const submitHandler = async (data: any) => {
+    const response = await addParticipants({
+      ...data,
+      meetingId: id,
+      memberId: +data.memberId,
+      attended: true,
+    });
+    if (response.status == httpStatus.OK) {
+      alert("Added Successfully");
     }
-    getData();
-  }, []);
+  };
 
-  const submitHandler = () => {};
-
-  if (isLoading) {
+  if (!memberData || !meetingData) {
     return <Loading />;
   }
 
@@ -80,14 +98,6 @@ const Participants = () => {
     <div>
       <Drawer isOpen={isOpen} setIsOpen={setIsOpen} title="Add Participants">
         <form onSubmit={handleSubmit(submitHandler)}>
-          <Select
-            name="meetingId"
-            register={register}
-            label="Meeting Topic"
-            options={selectOptions(selectMeeting || [])}
-            placeholder="Select Meeting Name"
-            required
-          />
           <Select
             name="memberId"
             register={register}

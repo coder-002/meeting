@@ -1,16 +1,24 @@
 import {
+  Button,
   Input,
   Toolbar,
   ToolbarButton,
   ToolbarDivider,
 } from "@fluentui/react-components";
-import { Alert24Regular, Search16Regular } from "@fluentui/react-icons";
+import {
+  Alert24Regular,
+  DarkTheme24Filled,
+  Search16Regular,
+} from "@fluentui/react-icons";
 import Breadcrumb from "./Breadcrumb";
 import User from "./User";
+import { useContext } from "react";
+import { ThemeContext } from "../../contexts/ThemeContextProvider";
+import ThemeSelector from "./ThemeSelector";
 
 const Header = () => {
   return (
-    <div className="flex justify-between shadow-md bg-white  ">
+    <div className="flex justify-between shadow-md">
       <Breadcrumb />
       <Toolbar>
         <Input
@@ -22,11 +30,8 @@ const Header = () => {
         <ToolbarDivider />
         <ToolbarButton icon={<Alert24Regular />}></ToolbarButton>
         <ToolbarDivider />
-        {/* <ToolbarButton
-          style={{ color: "#003060" }}
-          icon={<SignOut24Regular />}
-          onClick={logOut}
-        ></ToolbarButton> */}
+        <ThemeSelector />
+        <ToolbarDivider />
         <User />
       </Toolbar>
     </div>
