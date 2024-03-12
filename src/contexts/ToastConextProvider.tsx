@@ -9,6 +9,7 @@ import {
   useId,
   useToastController,
 } from "@fluentui/react-components";
+import { AlertOnRegular } from "@fluentui/react-icons";
 import { createContext, useContext } from "react";
 
 type ToastContextProps = {
@@ -16,6 +17,7 @@ type ToastContextProps = {
   notifyWarning: (message: string, title?: string) => void;
   notifyError: (message?: string, title?: string) => void;
   notifyLoading: (message?: string, title?: string) => void;
+  showNotification: (message: string, title?: string) => void;
 };
 
 const ToastContext = createContext<ToastContextProps>({
@@ -23,6 +25,7 @@ const ToastContext = createContext<ToastContextProps>({
   notifySuccess: () => console.log("Function not implemented"),
   notifyWarning: () => console.log("Function not implemented"),
   notifyLoading: () => console.log("Function not implemented"),
+  showNotification: () => console.log("Function not implemented")
 });
 
 const ToastContextProvider = ({ children }: { children: React.ReactNode }) => {
@@ -92,9 +95,21 @@ const ToastContextProvider = ({ children }: { children: React.ReactNode }) => {
     notify(message || "Please wait...", "loading", title);
   };
 
+  const showNotification = (message: string, title?: string) => {
+    dispatchToast(
+      <Toast appearance="inverted">
+        <ToastTitle media={<AlertOnRegular />}>
+          {title || "New Notification"}
+        </ToastTitle>
+        <ToastBody>{message}</ToastBody>
+      </Toast>,
+      { position: "bottom-end", timeout: 6000 }
+    );
+}
+
   return (
     <ToastContext.Provider
-      value={{ notifyError, notifyLoading, notifySuccess, notifyWarning }}
+      value={{ notifyError, notifyLoading, notifySuccess, notifyWarning, showNotification }}
     >
       <Toaster toasterId={toasterId} />
       {children}

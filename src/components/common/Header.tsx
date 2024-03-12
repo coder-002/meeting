@@ -8,6 +8,7 @@ import { Alert24Regular, Search16Regular } from "@fluentui/react-icons";
 import Breadcrumb from "./Breadcrumb";
 import User from "./User";
 import ThemeSelector from "./ThemeSelector";
+import { NotificationComp } from "../NotificationComp";
 
 const Header = () => {
   return (
@@ -21,7 +22,7 @@ const Header = () => {
           style={{ border: 0 }}
         />
         <ToolbarDivider />
-        <ToolbarButton icon={<Alert24Regular />}></ToolbarButton>
+        <NotificationComp />
         <ToolbarDivider />
         <ThemeSelector />
         <ToolbarDivider />
