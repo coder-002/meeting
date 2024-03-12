@@ -10,6 +10,7 @@ import {
   UseFormRegister,
   FieldValues,
   FieldError,
+  Path,
 } from "react-hook-form";
 
 const useStyles = makeStyles({
@@ -21,21 +22,7 @@ const useStyles = makeStyles({
   },
 });
 
-interface IInput<TFieldValues extends FieldValues = FieldValues>
-  extends InputProps {
-  register: UseFormRegister<any>;
-  rules?: RegisterOptions;
-  contentBefore?: any;
-  contentAfter?: any;
-  placeholder?: string;
-  disabled?: boolean;
-  label?: string;
-  required?: boolean;
-  error?: string | FieldError;
-  name: string;
-  width?: string;
-}
-const Input = ({
+const Input = <T extends FieldValues>({
   contentBefore,
   contentAfter,
   placeholder,
@@ -49,7 +36,7 @@ const Input = ({
   type,
   width,
   ...rest
-}: IInput) => {
+}: IInput<T>) => {
   const styles = useStyles();
 
   return (
@@ -73,5 +60,18 @@ const Input = ({
     </Field>
   );
 };
+interface IInput<TFieldValues extends FieldValues> extends InputProps {
+  register: UseFormRegister<TFieldValues>;
+  rules?: RegisterOptions;
+  contentBefore?: any;
+  contentAfter?: any;
+  placeholder?: string;
+  disabled?: boolean;
+  label?: string;
+  required?: boolean;
+  error?: string | FieldError;
+  name: Path<TFieldValues>;
+  width?: string;
+}
 
 export default Input;

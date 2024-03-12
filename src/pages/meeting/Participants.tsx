@@ -68,7 +68,10 @@ const Participants = ({ id }: { id: string }) => {
         return (
           <Badge
             appearance="filled"
-            color={item.attended ? "success" : "danger"}
+            // color={item.attended ? "success" : "danger"}
+            style={{
+              backgroundColor: item.isActive ? "primary" : "red",
+            }}
             size="large"
           >
             {item.attended ? "Present" : "Absent"}

@@ -15,7 +15,8 @@ import httpStatus from "http-status";
 import { IUnit } from "../../models/setup/unit";
 import { useToast } from "../../contexts/ToastConextProvider";
 import Loading from "../../components/Loading";
-import { IPostBranch } from "../../models/setup/branch";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 
 const initialValues = {
   orgUnitId: 0,
@@ -26,6 +27,17 @@ const initialValues = {
   contactNumber: "",
   isActive: true,
 };
+
+const schema = Yup.object({
+  orgUnitId: Yup.number().required(),
+  orgUnitName: Yup.string().required(),
+  branchCode: Yup.string().required(),
+  branchName: Yup.string().required(),
+  address: Yup.string().required(),
+  contactNumber: Yup.string().required(),
+  isActive: Yup.boolean(),
+});
+export type InitialType = Yup.InferType<typeof schema>;
 const Branch = () => {
   const { data } = useGetBranch();
   const { data: unitData } = useGetUnits();
@@ -38,8 +50,14 @@ const Branch = () => {
       return { id: item.id, name: item.unitName };
     });
 
-  const { register, handleSubmit, reset } = useForm<typeof initialValues>({
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors },
+  } = useForm<InitialType>({
     defaultValues: initialValues,
+    resolver: yupResolver(schema),
   });
 
   const cols = [
@@ -54,6 +72,16 @@ const Branch = () => {
     {
       dataKey: "orgUnitName",
       title: "Unit Name",
+      render: (item: any) => {
+        return (
+          <>
+            {
+              unitData.find((unit: IUnit) => unit.id == item.orgUnitId)
+                ?.unitName
+            }
+          </>
+        );
+      },
     },
     {
       dataKey: "address",
@@ -70,7 +98,9 @@ const Branch = () => {
         return (
           <Badge
             appearance="filled"
-            color={item.isActive ? "success" : "danger"}
+            style={{
+              backgroundColor: item.isActive ? "primary" : "red",
+            }}
           >
             {item.isActive ? "Active" : "Inactive"}
           </Badge>
@@ -79,12 +109,12 @@ const Branch = () => {
     },
   ];
 
-  const submitHandler = async (data: IPostBranch) => {
+  const submitHandler = async (data: InitialType) => {
     const response = await addBranch({
       ...data,
-      orgUnitName: unitData.find((item: IUnit) => item?.id == data?.orgUnitId)
-        ?.unitName,
       orgUnitId: +data.orgUnitId,
+      orgUnitName: unitData.find((item: IUnit) => item.id == data.orgUnitId)
+        ?.unitName,
       isActive: true,
     });
     if (response.status == httpStatus.OK) {
@@ -106,12 +136,14 @@ const Branch = () => {
             register={register}
             label="Branch Code"
             required
+            error={errors?.branchCode ?? ""}
           />
           <Input
             name="branchName"
             register={register}
             label="Branch Name"
             required
+            error={errors?.branchName ?? ""}
           />
           <Select
             name="orgUnitId"

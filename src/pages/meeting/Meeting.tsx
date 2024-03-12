@@ -140,7 +140,9 @@ const Meeting = () => {
         return (
           <Badge
             appearance="filled"
-            color={item.isCompleted ? "success" : "warning"}
+            style={{
+              backgroundColor: "primary",
+            }}
             size="large"
           >
             {item.isCompleted ? "Complete" : "Process"}

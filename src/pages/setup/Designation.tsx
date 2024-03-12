@@ -37,7 +37,10 @@ const Designation = () => {
         return (
           <Badge
             appearance="filled"
-            color={item.isActive ? "success" : "danger"}
+            // color={item.isActive ? "success" : "danger"}
+            style={{
+              backgroundColor: item.isActive ? "primary" : "red",
+            }}
           >
             {item.isActive ? "Active" : "Inactive"}
           </Badge>

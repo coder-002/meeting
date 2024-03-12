@@ -1,6 +1,5 @@
 import {
   BrandVariants,
-  Theme,
   createDarkTheme,
   createLightTheme,
 } from "@fluentui/react-components";

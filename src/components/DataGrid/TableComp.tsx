@@ -15,6 +15,7 @@ import {
 import { ReactNode, useEffect, useState } from "react";
 import Loading from "../Loading";
 import { Search16Regular } from "@fluentui/react-icons";
+import NotFound from "../NotFound/NotFound";
 
 export interface DataGridCol<T> {
   dataKey: keyof T;
@@ -116,8 +117,8 @@ export const TableComp = <T extends {}>(props: Props<T>) => {
               )}
             </DataGridRow>
           </DataGridHeader>
-          {!props.data ? (
-            ""
+          {props.data.length === 0 ? (
+            <NotFound />
           ) : (
             <DataGridBody<T>>
               {({ item, rowId }) => (
