@@ -15,8 +15,7 @@ import httpStatus from "http-status";
 import { IUnit } from "../../models/setup/unit";
 import { useToast } from "../../contexts/ToastConextProvider";
 import Loading from "../../components/Loading";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as Yup from "yup";
+import { IPostBranch } from "../../models/setup/branch";
 
 const initialValues = {
   orgUnitId: 0,
@@ -28,16 +27,6 @@ const initialValues = {
   isActive: true,
 };
 
-const schema = Yup.object({
-  orgUnitId: Yup.number().required(),
-  orgUnitName: Yup.string().required(),
-  branchCode: Yup.string().required(),
-  branchName: Yup.string().required(),
-  address: Yup.string().required(),
-  contactNumber: Yup.string().required(),
-  isActive: Yup.boolean(),
-});
-export type InitialType = Yup.InferType<typeof schema>;
 const Branch = () => {
   const { data } = useGetBranch();
   const { data: unitData } = useGetUnits();
@@ -55,9 +44,8 @@ const Branch = () => {
     handleSubmit,
     reset,
     formState: { errors },
-  } = useForm<InitialType>({
+  } = useForm<typeof initialValues>({
     defaultValues: initialValues,
-    resolver: yupResolver(schema),
   });
 
   const cols = [
@@ -109,7 +97,7 @@ const Branch = () => {
     },
   ];
 
-  const submitHandler = async (data: InitialType) => {
+  const submitHandler = async (data: IPostBranch) => {
     const response = await addBranch({
       ...data,
       orgUnitId: +data.orgUnitId,
