@@ -38,6 +38,9 @@ const initialValues = {
   description: "",
   committeeId: 0,
   notes: "",
+  date: "",
+  startTime: "",
+  endTime: "",
 };
 const Meeting = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -78,14 +81,7 @@ const Meeting = () => {
       dataKey: "topic",
       title: "Topic",
     },
-    {
-      dataKey: "description",
-      title: "Description",
-    },
-    {
-      dataKey: "notes",
-      title: "Notes",
-    },
+
     {
       dataKey: "committeeId",
       title: "Committee",
@@ -127,28 +123,46 @@ const Meeting = () => {
       },
     },
     {
-      dataKey: "createdOn",
-      title: "Created On.",
+      dataKey: "Date",
+      title: "Date",
       render: (item: any) => {
-        return <>{item.createdOn.slice(0, 10)}</>;
+        return <>{item.date.slice(0, 10)}</>;
       },
     },
     {
-      dataKey: "isCompleted",
-      title: "Status",
+      dataKey: "startTime",
+      title: "Start Time",
       render: (item: any) => {
-        return (
-          <Badge
-            appearance="filled"
-            style={{
-              backgroundColor: "primary",
-            }}
-            size="large"
-          >
-            {item.isCompleted ? "Complete" : "Process"}
-          </Badge>
-        );
+        return <>{item.startTime.slice(0, 8)}</>;
       },
+    },
+    {
+      dataKey: "endTime",
+      title: "End Time",
+      render: (item: any) => {
+        return <>{item.startTime.slice(0, 8)}</>;
+      },
+    },
+    // {
+    //   dataKey: "isCompleted",
+    //   title: "Status",
+    //   render: (item: any) => {
+    //     return (
+    //       <Badge
+    //         appearance="filled"
+    //         style={{
+    //           backgroundColor: "primary",
+    //         }}
+    //         size="large"
+    //       >
+    //         {item.isCompleted ? "Complete" : "Process"}
+    //       </Badge>
+    //     );
+    //   },
+    // },
+    {
+      dataKey: "description",
+      title: "Description",
     },
   ];
 
@@ -222,6 +236,29 @@ const Meeting = () => {
               options={selectOptions(selectCommittee || [])}
               placeholder="Select Committee Name"
               required
+            />
+            <Input
+              name="date"
+              register={register}
+              label="Date"
+              required
+              type="date"
+            />
+            <Input
+              name="startTime"
+              register={register}
+              label="Start Time"
+              required
+              type="time"
+              step="10"
+            />
+            <Input
+              name="endTime"
+              register={register}
+              label="End Time"
+              required
+              type="time"
+              step="10"
             />
             <Textarea
               name="description"

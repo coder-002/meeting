@@ -1,6 +1,6 @@
 import { TableComp } from "../../components/DataGrid/TableComp";
 import Drawer from "../../components/Drawer/Drawer";
-import { Badge, Button } from "@fluentui/react-components";
+import { Badge, Button, Subtitle2 } from "@fluentui/react-components";
 import { useForm } from "react-hook-form";
 import Select from "../../components/form/Select";
 import { selectOptions } from "../../helpers/selectOptions";
@@ -14,16 +14,14 @@ import { IMember } from "../../models/member/member";
 import { useState } from "react";
 import httpStatus from "http-status";
 import Loading from "../../components/Loading";
-import { IMeeting } from "../../models/meeting";
 
 const Participants = ({ id }: { id: string }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { data: meetingData } = useGetMeeting();
-  // const { mutateAsync: getMember, isLoading } = useGetMember();
   const { data: memberData } = useGetAllMember();
   const { data: participants } = useGetPartipants(id || "");
   const { mutateAsync: addParticipants } = useAddParticipant();
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit, reset } = useForm();
 
   const selectMember =
     memberData &&
@@ -32,21 +30,6 @@ const Participants = ({ id }: { id: string }) => {
     });
 
   const cols = [
-    {
-      dataKey: "meetingId",
-      title: "Meeting Topic",
-      render: (item: any) => {
-        return (
-          <>
-            {
-              meetingData?.find(
-                (meeting: IMeeting) => meeting.id == item.meetingId
-              ).topic
-            }
-          </>
-        );
-      },
-    },
     {
       dataKey: "memberId",
       title: "Member Name",
@@ -63,14 +46,14 @@ const Participants = ({ id }: { id: string }) => {
     },
     {
       dataKey: "attended",
-      title: "Description",
+      title: "Attended",
       render: (item: any) => {
         return (
           <Badge
             appearance="filled"
             // color={item.attended ? "success" : "danger"}
             style={{
-              backgroundColor: item.isActive ? "primary" : "red",
+              backgroundColor: item.attended ? "primary" : "red",
             }}
             size="large"
           >
@@ -86,10 +69,11 @@ const Participants = ({ id }: { id: string }) => {
       ...data,
       meetingId: id,
       memberId: +data.memberId,
-      attended: true,
+      attended: false,
     });
-    if (response.status == httpStatus.OK) {
-      alert("Added Successfully");
+    if (response.status == httpStatus.CREATED) {
+      setIsOpen(!open);
+      reset();
     }
   };
 
@@ -125,13 +109,18 @@ const Participants = ({ id }: { id: string }) => {
         </form>
       </Drawer>
 
-      <TableComp
-        columns={cols}
-        data={participants || []}
-        onAction={() => setIsOpen(!isOpen)}
-        btnText="Add Participants"
-        onSelect={() => {}}
-      />
+      <div className="p-4 w-full ">
+        <Subtitle2>Participants List</Subtitle2>
+        <div>
+          <TableComp
+            columns={cols}
+            data={participants || []}
+            onAction={() => setIsOpen(!isOpen)}
+            btnText="Add"
+            onSelect={() => {}}
+          />
+        </div>
+      </div>
     </div>
   );
 };

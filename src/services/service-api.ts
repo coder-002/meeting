@@ -33,9 +33,11 @@ export const api = {
     delete: "/Meeting/{meetingId}",
     patch: "/Meeting/{id}",
     approve: "/Meeting/Approve/{meetingId}",
+    editNotes: "/Meeting/UpdateNote",
     participants: {
       get: "/Participant/{meetingId}/participants",
       post: "/Participant/{meetingId}/participant",
+      update: "/Participant/{meetingId}/participant",
     },
   },
   member: {

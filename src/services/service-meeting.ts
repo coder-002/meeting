@@ -90,6 +90,26 @@ const useAddParticipant = () => {
   });
 };
 
+const updateParticipants = (participants: IParticipants) => {
+  const { meetingId, ...rest } = participants;
+  return instance.post(
+    api.meeting.participants.update.replace("{meetingId}", meetingId),
+    rest
+  );
+};
+
+const useUpdateParticipants = () => {
+  const queryClient = useQueryClient();
+  return useMutation(updateParticipants, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(api.meeting.participants.get);
+    },
+    onError: (e) => {
+      console.log(e);
+    },
+  });
+};
+
 export {
   useGetMeeting,
   useCreateMeeting,
@@ -97,4 +117,5 @@ export {
   useApproveMeeting,
   useGetPartipants,
   useAddParticipant,
+  useUpdateParticipants,
 };

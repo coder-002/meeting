@@ -1,15 +1,11 @@
 import { ReactNode, useEffect, useState } from "react";
 import TabList from "../../components/form/TabList";
 import {
-  Button,
-  Divider,
   SelectTabData,
   SelectTabEvent,
-  Subtitle1,
   TabValue,
 } from "@fluentui/react-components";
 import {
-  ArrowLeft24Filled,
   Branch16Filled,
   Group20Filled,
   Organization16Filled,
@@ -18,12 +14,11 @@ import {
 } from "@fluentui/react-icons";
 import { TrayItemRemove20Filled } from "@fluentui/react-icons/lib/fonts";
 import { Navigation_Routes } from "../../routes/routes.constant";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 const Setup = ({ children }: { children: ReactNode }) => {
   const [selectedValue, setSelectedValue] = useState<TabValue>("organization");
   const { pathname } = useLocation();
-  const navigate = useNavigate();
   const tablist = [
     {
       id: "1",

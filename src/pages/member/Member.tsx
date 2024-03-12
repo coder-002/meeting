@@ -23,7 +23,6 @@ import { useToast } from "../../contexts/ToastConextProvider";
 
 const Member = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [search, setSearch] = useState("");
   const [data, setData] = useState([]);
   const [edit, setEdit] = useState(false);
   const [updateId, setUpdateId] = useState("");

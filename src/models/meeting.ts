@@ -7,6 +7,9 @@ export interface IMeeting {
   description: string;
   committeeId: number;
   notes: string;
+  date: string;
+  startTime: string;
+  endTime: string;
 }
 
 export type IPostMeeting = Omit<IMeeting, "id">;

@@ -75,7 +75,7 @@ export const NotificationComp = () => {
         </PopoverTrigger>
 
         <PopoverSurface style={{ maxWidth: "600px" }}>
-            //eterate the list of notification here
+            //iterate the list of notification here
         </PopoverSurface>
     </Popover>
 

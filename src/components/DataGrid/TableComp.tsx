@@ -83,7 +83,7 @@ export const TableComp = <T extends {}>(props: Props<T>) => {
   return props.loading ? (
     <Loading />
   ) : (
-    <div className="p-4 h-[50rem] overflow-hidden">
+    <div className="p-4 overflow-hidden">
       <div className="flex gap-4">
         <Input
           size="medium"
@@ -97,7 +97,7 @@ export const TableComp = <T extends {}>(props: Props<T>) => {
           </Button>
         )}
       </div>
-      <div className="h-full overflow-y-auto mt-4">
+      <div className="max-h-[50rem] overflow-y-auto mt-4">
         <DataGrid
           columns={cols}
           items={props.data}
