@@ -30,6 +30,7 @@ import { useForm } from "react-hook-form";
 import Textarea from "../../components/form/TextArea";
 import Attended from "./Attended";
 import Participants from "./Participants";
+import { useToast } from "../../contexts/ToastConextProvider";
 
 const initialValues = {
   notes: "",
@@ -47,6 +48,7 @@ const MeetingDetails = () => {
     defaultValues: initialValues,
   });
 
+  const { notifySuccess, notifyError } = useToast();
   const [singleMeeting, setSingleMeeting] = useState<IMeeting>();
   const { data } = useGetMeeting();
   // const { mutateAsync: approveMeeting } = useApproveMeeting();
@@ -73,8 +75,8 @@ const MeetingDetails = () => {
     const meetingId = id || "";
     const response = await editNotes({ meetingId, notes: data });
     if (response.status == httpStatus.OK) {
-      console.log("heelo");
-    }
+      notifySuccess("Notes successfully updated");
+    } else notifyError("Notes update failed");
   };
 
   if (!unitData || !branchData || !committeData || !data) {
@@ -145,21 +147,22 @@ const MeetingDetails = () => {
                 }
               </Body2>
             </div>
-            <div className=" flex gap-4">
-              <Subtitle2>Description :</Subtitle2>
-              <Body2>{singleMeeting?.description}</Body2>
-            </div>
+
             <div className=" flex gap-4">
               <Subtitle2>Date :</Subtitle2>
               <Body2>{singleMeeting?.date}</Body2>
             </div>
             <div className=" flex gap-4">
               <Subtitle2>Start Time :</Subtitle2>
-              <Body2>{singleMeeting?.startTime}</Body2>
+              <Body2>{singleMeeting?.startTime.slice(0, 8)}</Body2>
             </div>
             <div className=" flex gap-4">
               <Subtitle2>End Time :</Subtitle2>
-              <Body2>{singleMeeting?.endTime}</Body2>
+              <Body2>{singleMeeting?.endTime.slice(0, 8)}</Body2>
+            </div>
+            <div className=" flex gap-4">
+              <Subtitle2>Description :</Subtitle2>
+              <Body2>{singleMeeting?.description}</Body2>
             </div>
             <div className=" flex gap-4">
               <Subtitle2>Notes :</Subtitle2>
@@ -180,7 +183,7 @@ const MeetingDetails = () => {
 
         <div className="shadow-md p-2 mt-4">
           <Subtitle2>Upload Attachment</Subtitle2>
-          <Upload />
+          <Upload id={id || ""} />
         </div>
       </div>
       <div className=" h-full shadow-md">
