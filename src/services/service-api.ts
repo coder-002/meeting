@@ -33,7 +33,7 @@ export const api = {
     delete: "/Meeting/{meetingId}",
     patch: "/Meeting/{id}",
     approve: "/Meeting/Approve/{meetingId}",
-    editNotes: "/Meeting/UpdateNote",
+    editNotes: "/Meeting/{meetingId}/UpdateNote",
     participants: {
       get: "/Participant/{meetingId}/participants",
       post: "/Participant/{meetingId}/participant",
@@ -63,5 +63,9 @@ export const api = {
         post: "/member/relation",
       },
     },
+  },
+  attachments: {
+    get: "/Attachment/download/{itemKey}/{attachmentId}",
+    post: "/Attachment/upload",
   },
 };

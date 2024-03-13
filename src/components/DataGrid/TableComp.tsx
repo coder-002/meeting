@@ -32,6 +32,7 @@ type Props<T> = {
   onSelect?: (item: T) => void;
   onAction?: () => void;
   btnText?: string;
+  search?: boolean;
 };
 
 export const TableComp = <T extends {}>(props: Props<T>) => {
@@ -85,12 +86,14 @@ export const TableComp = <T extends {}>(props: Props<T>) => {
   ) : (
     <div className="p-4 overflow-hidden">
       <div className="flex gap-4">
-        <Input
-          size="medium"
-          placeholder="Search..."
-          contentAfter={<Search16Regular />}
-          style={{ width: "300px" }}
-        />
+        {props.search && (
+          <Input
+            size="medium"
+            placeholder="Search..."
+            contentAfter={<Search16Regular />}
+            style={{ width: "300px" }}
+          />
+        )}
         {props.btnText && (
           <Button appearance="primary" onClick={props.onAction}>
             {props.btnText}
@@ -104,8 +107,8 @@ export const TableComp = <T extends {}>(props: Props<T>) => {
           getRowId={(item) =>
             props.idCol ? item[props.idCol] : props.data.indexOf(item)
           }
-          selectionMode="single"
           sortable
+          selectionMode="single"
           onSelectionChange={handleSelect}
         >
           <DataGridHeader>
@@ -124,9 +127,9 @@ export const TableComp = <T extends {}>(props: Props<T>) => {
               {({ item, rowId }) => (
                 <DataGridRow<T>
                   key={rowId}
-                  selectionCell={{
-                    checkboxIndicator: { "aria-label": "Select row" },
-                  }}
+                  // selectionCell={{
+                  //   checkboxIndicator: { "aria-label": "Select row" },
+                  // }}
                 >
                   {({ renderCell }) => (
                     <DataGridCell>{renderCell(item)}</DataGridCell>

@@ -1,6 +1,8 @@
 import { useNavigate, useParams } from "react-router-dom";
 import {
+  IUpdate,
   useApproveMeeting,
+  useEditNotes,
   useGetMeeting,
 } from "../../services/service-meeting";
 import { useEffect, useState } from "react";
@@ -19,14 +21,15 @@ import { useGetCommittee } from "../../services/setup/service-committee";
 import { IBranch } from "../../models/setup/branch";
 import { ICommittee } from "../../models/setup/committee";
 import { ArrowLeft24Filled } from "@fluentui/react-icons";
-import Participants from "./Participants";
 import Loading from "../../components/Loading";
 import Upload from "../../components/form/Upload";
 import httpStatus from "http-status";
 import { Navigation_Routes } from "../../routes/routes.constant";
 import Modal from "../../components/common/Modal";
 import { useForm } from "react-hook-form";
-import Input from "../../components/form/Input";
+import Textarea from "../../components/form/TextArea";
+import Attended from "./Attended";
+import Participants from "./Participants";
 
 const initialValues = {
   notes: "",
@@ -34,42 +37,45 @@ const initialValues = {
 
 const MeetingDetails = () => {
   const { id } = useParams();
+  const [approved, setApproved] = useState(false);
   const navigate = useNavigate();
   const { data: unitData } = useGetUnits();
   const { data: branchData } = useGetBranch();
   const { data: committeData } = useGetCommittee();
+  const { mutateAsync: editNotes } = useEditNotes();
   const { register, reset, handleSubmit } = useForm<typeof initialValues>({
     defaultValues: initialValues,
   });
 
   const [singleMeeting, setSingleMeeting] = useState<IMeeting>();
   const { data } = useGetMeeting();
-  const { mutateAsync: approveMeeting } = useApproveMeeting();
+  // const { mutateAsync: approveMeeting } = useApproveMeeting();
 
   useEffect(() => {
     if (data && id) {
       const meeting = data.find((item: IMeeting) => item.id == +id);
       setSingleMeeting(meeting);
     }
-  }, []);
+  }, [data]);
 
-  const handleApprove = async (id: string) => {
-    const response = await approveMeeting(id);
-    if (response.status === httpStatus.OK) {
-      navigate(Navigation_Routes.MEETING);
-    }
-  };
+  // const handleApprove = async (id: string) => {
+  //   const response = await approveMeeting(id);
+  //   if (response.status === httpStatus.OK) {
+  //     navigate(Navigation_Routes.MEETING);
+  //   }
+  // };
 
   useEffect(() => {
     reset({ notes: singleMeeting?.notes || "" });
   }, [id, singleMeeting]);
 
-  // const onSubmitHandler = async (notes: string) => {
-  //   const response = await editNotes(notes);
-  //   if (response.status === httpStatus.OK) {
-  //     console.log("heelo");
-  //   }
-  // };
+  const onSubmitHandler = async (data: IUpdate) => {
+    const meetingId = id || "";
+    const response = await editNotes({ meetingId, notes: data });
+    if (response.status == httpStatus.OK) {
+      console.log("heelo");
+    }
+  };
 
   if (!unitData || !branchData || !committeData || !data) {
     return <Loading />;
@@ -89,15 +95,15 @@ const MeetingDetails = () => {
               />
               <Subtitle1>Meeting Details</Subtitle1>
             </div>
-            {/* <Modal
+            <Modal
               btnText="Edit Notes"
               title="Edit Notes"
               submitButtonText="Update"
               resetButtonText="Cancel"
               submitHandler={handleSubmit(onSubmitHandler)}
             >
-              <Input name="notes" register={register} label="Notes" />
-            </Modal> */}
+              <Textarea name="notes" register={register} label="Notes" />
+            </Modal>
           </div>
           <Divider />
           <div className="grid grid-cols-3 gap-4">
@@ -164,18 +170,21 @@ const MeetingDetails = () => {
           <div className="flex justify-end p-5">
             <Button
               appearance="primary"
-              onClick={() => handleApprove(id || "")}
+              // onClick={() => handleApprove(id || "")}
+              onClick={() => setApproved(!approved)}
             >
               Approve
             </Button>
           </div>
         </div>
 
-        <Subtitle2>Upload Attachment</Subtitle2>
-        <Upload />
+        <div className="shadow-md p-2 mt-4">
+          <Subtitle2>Upload Attachment</Subtitle2>
+          <Upload />
+        </div>
       </div>
       <div className=" h-full shadow-md">
-        <Participants id={id || ""} />
+        {approved ? <Attended id={id || ""} /> : <Participants id={id || ""} />}
       </div>
     </div>
   );

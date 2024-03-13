@@ -1,6 +1,6 @@
 import { TableComp } from "../../components/DataGrid/TableComp";
 import Drawer from "../../components/Drawer/Drawer";
-import { Badge, Button, Subtitle2 } from "@fluentui/react-components";
+import { Button, Subtitle2 } from "@fluentui/react-components";
 import { useForm } from "react-hook-form";
 import Select from "../../components/form/Select";
 import { selectOptions } from "../../helpers/selectOptions";
@@ -44,24 +44,24 @@ const Participants = ({ id }: { id: string }) => {
         );
       },
     },
-    {
-      dataKey: "attended",
-      title: "Attended",
-      render: (item: any) => {
-        return (
-          <Badge
-            appearance="filled"
-            // color={item.attended ? "success" : "danger"}
-            style={{
-              backgroundColor: item.attended ? "primary" : "red",
-            }}
-            size="large"
-          >
-            {item.attended ? "Present" : "Absent"}
-          </Badge>
-        );
-      },
-    },
+    // {
+    //   dataKey: "attended",
+    //   title: "Attended",
+    //   render: (item: any) => {
+    //     return (
+    //       <Badge
+    //         appearance="filled"
+    //         // color={item.attended ? "success" : "danger"}
+    //         style={{
+    //           backgroundColor: item.attended ? "primary" : "red",
+    //         }}
+    //         size="large"
+    //       >
+    //         {item.attended ? "Present" : "Absent"}
+    //       </Badge>
+    //     );
+    //   },
+    // },
   ];
 
   const submitHandler = async (data: any) => {

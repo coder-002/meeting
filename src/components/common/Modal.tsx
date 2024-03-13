@@ -71,9 +71,15 @@ const Modal = ({
           </DialogBody>
           <DialogActions className="mt-2">
             {submitButtonText && (
-              <Button type="submit" appearance="primary" onClick={handleSubmit}>
-                {submitButtonText}
-              </Button>
+              <DialogTrigger disableButtonEnhancement>
+                <Button
+                  type="submit"
+                  appearance="primary"
+                  onClick={handleSubmit}
+                >
+                  {submitButtonText}
+                </Button>
+              </DialogTrigger>
             )}
             {resetButtonText && (
               <DialogTrigger disableButtonEnhancement>

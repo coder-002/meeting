@@ -92,7 +92,7 @@ const useAddParticipant = () => {
 
 const updateParticipants = (participants: IParticipants) => {
   const { meetingId, ...rest } = participants;
-  return instance.post(
+  return instance.put(
     api.meeting.participants.update.replace("{meetingId}", meetingId),
     rest
   );
@@ -110,6 +110,35 @@ const useUpdateParticipants = () => {
   });
 };
 
+export interface IUpdate {
+  notes: string;
+}
+
+const editNotes = ({
+  meetingId,
+  notes,
+}: {
+  meetingId: string;
+  notes: IUpdate;
+}) => {
+  return instance.put(
+    api.meeting.editNotes.replace("{meetingId}", meetingId),
+    notes
+  );
+};
+
+const useEditNotes = () => {
+  const queryClient = useQueryClient();
+  return useMutation(editNotes, {
+    onSuccess: () => {
+      queryClient.invalidateQueries(api.meeting.get);
+    },
+    onError: (e) => {
+      console.log(e);
+    },
+  });
+};
+
 export {
   useGetMeeting,
   useCreateMeeting,
@@ -118,4 +147,5 @@ export {
   useGetPartipants,
   useAddParticipant,
   useUpdateParticipants,
+  useEditNotes,
 };
