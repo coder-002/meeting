@@ -73,5 +73,7 @@ export const api = {
   },
   allowance: {
     getDefaultAllowance: "/DefaultAllowance",
+    postDefaultAllowance: "/DefaultAllowance",
+    updateDefaultAllowance: "/DefaultAllowance/{id}",
   },
 };
