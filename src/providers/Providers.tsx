@@ -4,6 +4,7 @@ import ToastContextProvider from "../contexts/ToastConextProvider";
 import { BrowserRouter } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "react-query";
 import ThemeProvider from "../contexts/ThemeContextProvider";
+import AlertContextProvider from "../contexts/AlertContext";
 
 interface Props {
   children: ReactNode;
@@ -15,7 +16,11 @@ const Providers = ({ children }: Props) => {
       <ThemeProvider>
         <QueryClientProvider client={queryClient}>
           <AuthContextProvider>
-            <ToastContextProvider>{children}</ToastContextProvider>
+            <ToastContextProvider>
+              <AlertContextProvider>
+                {children}
+              </AlertContextProvider>
+            </ToastContextProvider>
           </AuthContextProvider>
         </QueryClientProvider>
       </ThemeProvider>

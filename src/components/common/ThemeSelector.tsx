@@ -13,7 +13,7 @@ const ThemeSelector = () => {
   const [open, setOpen] = useState(false);
   const setThemeName = useContext(ThemeContext);
 
-  const handleOpenChange: PopoverProps["onOpenChange"] = (e, data) =>
+  const handleOpenChange: PopoverProps["onOpenChange"] = (_, data) =>
     setOpen(data.open || false);
   return (
     <Popover open={open} onOpenChange={handleOpenChange} withArrow>

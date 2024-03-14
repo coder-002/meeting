@@ -21,7 +21,7 @@ import { Navigation_Routes } from "../../routes/routes.constant";
 export const Menu = () => {
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
-  const handleOpenChange: PopoverProps["onOpenChange"] = (e, data) =>
+  const handleOpenChange: PopoverProps["onOpenChange"] = (_, data) =>
     setOpen(data.open || false);
 
   return (
