@@ -21,6 +21,7 @@ interface Props {
   submitHandler?: () => void;
   handleSubmit?: () => void;
   closeDialog?: () => void;
+  isLoading?: boolean;
 }
 
 const useStyles = makeStyles({
@@ -36,7 +37,7 @@ const CustomDialogTrigger = React.forwardRef<
   { btnText: string } & DialogTriggerChildProps
 >(({ btnText, ...props }, ref) => {
   return (
-    <Button {...props} ref={ref}>
+    <Button {...props} ref={ref} appearance="primary">
       {btnText}
     </Button>
   );

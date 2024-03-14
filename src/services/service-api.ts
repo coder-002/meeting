@@ -17,6 +17,9 @@ export const api = {
       getMember: "/committee/members/{committeeId}",
       postMember: "/committee/member",
       deleteMember: "/committee/member/{id}",
+      // getAllowance: "/Allowance/member/{memberId}",
+      // getAllAllowance: "/Allowance/all",
+      // postAllowance: "/Allowance",
     },
   },
   designation: {
@@ -67,5 +70,10 @@ export const api = {
   attachments: {
     get: "/Attachment/download/{itemKey}/{attachmentId}",
     post: "/Attachment/upload",
+  },
+  allowance: {
+    getDefaultAllowance: "/DefaultAllowance",
+    postDefaultAllowance: "/DefaultAllowance",
+    updateDefaultAllowance: "/DefaultAllowance/{id}",
   },
 };

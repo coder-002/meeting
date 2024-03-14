@@ -143,23 +143,6 @@ const Meeting = () => {
         return <>{item.startTime.slice(0, 8)}</>;
       },
     },
-    // {
-    //   dataKey: "isCompleted",
-    //   title: "Status",
-    //   render: (item: any) => {
-    //     return (
-    //       <Badge
-    //         appearance="filled"
-    //         style={{
-    //           backgroundColor: "primary",
-    //         }}
-    //         size="large"
-    //       >
-    //         {item.isCompleted ? "Complete" : "Process"}
-    //       </Badge>
-    //     );
-    //   },
-    // },
     {
       dataKey: "description",
       title: "Description",
@@ -307,7 +290,7 @@ const Meeting = () => {
               resetButtonText="Cancel"
               submitHandler={handleSubmit(submitHandler)}
             >
-              <p>hello</p>
+              
             </Modal> */}
           </div>
         )}

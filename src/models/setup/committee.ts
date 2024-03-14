@@ -27,3 +27,14 @@ export type IPostCommitteeMember = Omit<
   ICommitteeMember,
   "id" | "committee" | "designation"
 >;
+
+export interface IAllowance {
+  id: number;
+  memberId: number;
+  committeeId: number;
+  meetingId: number;
+  allowanceName: string;
+  amount: number;
+  rate: number;
+}
+export type IPostAllowance = Omit<ICommitteeMember, "id">;
