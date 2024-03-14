@@ -44,7 +44,7 @@ export const api = {
     },
   },
   member: {
-    getAllMember: "/member/all",
+    getAllMember: "/member/allnextmember",
     getMember: "/member/page",
     post: "/member",
     init: "/member/init",

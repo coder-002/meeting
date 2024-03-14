@@ -17,6 +17,7 @@ import { selectOptions } from "../../helpers/selectOptions";
 import { useParams } from "react-router-dom";
 import httpStatus from "http-status";
 import { IAllowance } from "../../models/allowance";
+import { useToast } from "../../contexts/ToastConextProvider";
 
 const initialValues = {
   committeeId: "",
@@ -37,6 +38,7 @@ const Allowance = () => {
   const { register, handleSubmit, reset } = useForm({
     defaultValues: initialValues,
   });
+  const { notifySuccess, notifyError } = useToast();
 
   const selectDesignation =
     designationData &&
@@ -99,12 +101,10 @@ const Allowance = () => {
         rate: +data.rate,
       });
       if (response.status === httpStatus.OK) {
-        //TO-DO api issue
+        notifySuccess("Update allowance successfully");
         setIsOpen(false);
-        setUpdateId("");
         reset(initialValues);
-        console.log("updated");
-      }
+      } else notifyError("Update allowance failed");
     } else {
       const response = await addAllowance({
         ...data,
@@ -115,11 +115,10 @@ const Allowance = () => {
       });
 
       if (response.status === httpStatus.OK) {
-        // TO-DO api issue
         setIsOpen(false);
         reset(initialValues);
-        console.log("heelo");
-      }
+        notifySuccess("Allowance added successfully");
+      } else notifyError("Allowance added failed");
     }
   };
 

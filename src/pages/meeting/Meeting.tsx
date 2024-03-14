@@ -29,6 +29,7 @@ import { Navigation_Routes } from "../../routes/routes.constant";
 import Loading from "../../components/Loading";
 import { useToast } from "../../contexts/ToastConextProvider";
 import Textarea from "../../components/form/TextArea";
+import { DeleteModal } from "../../components/common/DeleteModal";
 
 const initialValues = {
   branchId: 0,
@@ -276,22 +277,20 @@ const Meeting = () => {
               View
             </Button>
 
-            <Button
+            {/* <Button
               icon={<Delete16Filled />}
               appearance="primary"
               onClick={() => handleDelete(view)}
             >
               Delete
-            </Button>
-            {/* <Modal
-              btnText="Delete"
+            </Button> */}
+            <DeleteModal
               title="Delete"
-              submitButtonText="Submit"
-              resetButtonText="Cancel"
-              submitHandler={handleSubmit(submitHandler)}
-            >
-              
-            </Modal> */}
+              handleClick={() => handleDelete(view)}
+              message="You're about to delete the meeting. Please back up any content you
+              need before proceeding."
+              consent="Yes, delete this meeting"
+            />
           </div>
         )}
         <TableComp

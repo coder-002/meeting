@@ -21,7 +21,6 @@ interface Props {
   submitHandler?: () => void;
   handleSubmit?: () => void;
   closeDialog?: () => void;
-  isLoading?: boolean;
 }
 
 const useStyles = makeStyles({
@@ -37,7 +36,7 @@ const CustomDialogTrigger = React.forwardRef<
   { btnText: string } & DialogTriggerChildProps
 >(({ btnText, ...props }, ref) => {
   return (
-    <Button {...props} ref={ref} appearance="primary">
+    <Button {...props} ref={ref}>
       {btnText}
     </Button>
   );
@@ -72,15 +71,9 @@ const Modal = ({
           </DialogBody>
           <DialogActions className="mt-2">
             {submitButtonText && (
-              <DialogTrigger disableButtonEnhancement>
-                <Button
-                  type="submit"
-                  appearance="primary"
-                  onClick={handleSubmit}
-                >
-                  {submitButtonText}
-                </Button>
-              </DialogTrigger>
+              <Button type="submit" appearance="primary" onClick={handleSubmit}>
+                {submitButtonText}
+              </Button>
             )}
             {resetButtonText && (
               <DialogTrigger disableButtonEnhancement>

@@ -13,7 +13,12 @@ import { useForm } from "react-hook-form";
 import { useGetDesignation } from "../../services/setup/service-designation";
 import { selectOptions } from "../../helpers/selectOptions";
 import Input from "../../components/form/Input";
-import { Button, Subtitle1 } from "@fluentui/react-components";
+import {
+  Button,
+  Checkbox,
+  CheckboxOnChangeData,
+  Subtitle1,
+} from "@fluentui/react-components";
 import { useGetAllMember } from "../../services/service-members";
 import { IMember } from "../../models/member/member";
 import { IDesignation } from "../../models/setup/designation";
@@ -22,6 +27,8 @@ import httpStatus from "http-status";
 import { ArrowLeft24Filled, Delete16Filled } from "@fluentui/react-icons";
 import Loading from "../../components/Loading";
 import Allowance from "./Allowance";
+import { useToast } from "../../contexts/ToastConextProvider";
+import { DeleteModal } from "../../components/common/DeleteModal";
 
 const CommitteeMember = () => {
   const { committeeId: id } = useParams();
@@ -35,6 +42,7 @@ const CommitteeMember = () => {
   const { mutateAsync: addMember } = useAddCommitteeMember();
   const { register, handleSubmit, reset } = useForm();
   const navigate = useNavigate();
+  const { notifySuccess, notifyError } = useToast();
 
   const selectDesignation =
     designationData &&
@@ -92,8 +100,12 @@ const CommitteeMember = () => {
   const submitHandler = async (data: any) => {
     const response = await addMember({ ...data, committeeId: id });
     if (response.status == httpStatus.OK) {
+      notifySuccess("Member Added Successfully");
       setIsOpen(false);
+      setView("");
       reset();
+    } else {
+      notifyError("Member  Adding Failed");
     }
   };
   const handleRowClick = (items: any) => {
@@ -103,8 +115,8 @@ const CommitteeMember = () => {
   const handleDelete = async (view: string) => {
     const response = await deleteCommitteeMember(view);
     if (response.status === httpStatus.OK) {
-      alert("Deleted");
-    }
+      notifySuccess("Deleted Successfully");
+    } else notifyError("Deletion failed");
   };
 
   if (!designationData || !memberData || !committeeData) {
@@ -183,13 +195,13 @@ const CommitteeMember = () => {
           {view && (
             <>
               <div className="flex gap-4 absolute top-4 right-0">
-                <Button
-                  icon={<Delete16Filled />}
-                  appearance="primary"
-                  onClick={() => handleDelete(view)}
-                >
-                  Delete
-                </Button>
+                <DeleteModal
+                  title="Delete"
+                  handleClick={() => handleDelete(view)}
+                  message="You're about to delete the member. Please back up any content you
+              need before proceeding."
+                  consent="Yes, delete this member"
+                />
               </div>
             </>
           )}
@@ -204,7 +216,7 @@ const CommitteeMember = () => {
       </div>
       <div className="shadow-md ">
         <div className="px-4"></div>
-        <Allowance/>
+        <Allowance />
       </div>
     </div>
   );
