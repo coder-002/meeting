@@ -56,7 +56,7 @@ const AppRoutes = () => {
       path: Navigation_Routes.PARTICIPANTS_DETAILS,
       element: (
         <Layout>
-          <Participants />
+          <Participants id="" />
         </Layout>
       ),
     },

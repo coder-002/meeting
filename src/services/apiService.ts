@@ -2,6 +2,7 @@ import axios, { AxiosError } from "axios";
 import { redirectToLogin } from "./authService";
 import { getToken } from "../contexts/AuthContextProvider";
 let baseUrl = "http://168.119.14.23:8002";
+//let baseUrl = "http://localhost:5282";
 
 const instance = axios.create({
   baseURL: `${baseUrl}/api`,
@@ -19,7 +20,7 @@ instance.interceptors.response.use(
   function (error) {
     switch (error.response?.status) {
       case 401: {
-        redirectToLogin();
+        return redirectToLogin();
       }
       case 500: {
         return "Something went wrong";

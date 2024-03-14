@@ -1,10 +1,9 @@
 import {
   Input,
   Toolbar,
-  ToolbarButton,
   ToolbarDivider,
 } from "@fluentui/react-components";
-import { Alert24Regular, Search16Regular } from "@fluentui/react-icons";
+import { Search16Regular } from "@fluentui/react-icons";
 import Breadcrumb from "./Breadcrumb";
 import User from "./User";
 import ThemeSelector from "./ThemeSelector";

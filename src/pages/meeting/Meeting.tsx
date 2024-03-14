@@ -5,7 +5,7 @@ import {
   useDeleteMeeting,
   useGetMeeting,
 } from "../../services/service-meeting";
-import { Badge, Button, Subtitle1 } from "@fluentui/react-components";
+import { Button, Subtitle1 } from "@fluentui/react-components";
 import { useGetUnits } from "../../services/setup/service-unit";
 import { IUnit } from "../../models/setup/unit";
 import { useGetCommittee } from "../../services/setup/service-committee";
