@@ -64,7 +64,11 @@ const Upload = ({ id }: { id: string }) => {
           </div>
           {imagePreview && (
             <div>
-              <img src={imagePreview} alt="Preview" />
+              <img
+                src={imagePreview}
+                alt="Preview"
+                style={{ width: "150px", height: "150px" }}
+              />
               <Button onClick={handleRemoveImage}>Remove</Button>
             </div>
           )}
