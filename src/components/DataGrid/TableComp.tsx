@@ -100,7 +100,7 @@ export const TableComp = <T extends {}>(props: Props<T>) => {
           </Button>
         )}
       </div>
-      <div className="max-h-[50rem] overflow-y-auto mt-4">
+      <div className="max-h-[45rem] overflow-y-auto mt-4">
         <DataGrid
           columns={cols}
           items={props.data}

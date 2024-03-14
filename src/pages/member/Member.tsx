@@ -125,7 +125,7 @@ const Member = () => {
         size="lg"
       >
         <form onSubmit={handleSubmit(submitHandler)}>
-          <div className=" flex flex-col gap-3 mt-3">
+          <div className=" flex flex-col gap-3">
             <div className="grid lg:grid-cols-2 md:grid-cols-1">
               <div>
                 <Subtitle1>Member Info</Subtitle1>

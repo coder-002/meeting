@@ -15,7 +15,9 @@ const Providers = ({ children }: Props) => {
       <ThemeProvider>
         <QueryClientProvider client={queryClient}>
           <AuthContextProvider>
-            <ToastContextProvider>{children}</ToastContextProvider>
+            <ToastContextProvider>
+              <div className="h-screen">{children}</div>
+            </ToastContextProvider>
           </AuthContextProvider>
         </QueryClientProvider>
       </ThemeProvider>

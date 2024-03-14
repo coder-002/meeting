@@ -1,4 +1,6 @@
 import {
+  Caption1,
+  Divider,
   Popover,
   PopoverProps,
   PopoverSurface,
@@ -22,7 +24,8 @@ const ThemeSelector = () => {
       </PopoverTrigger>
 
       <PopoverSurface style={{ maxWidth: "400px" }}>
-        <div className="grid grid-cols-2">
+        <Caption1>Light Theme</Caption1>
+        <div className="grid grid-cols-3">
           <ToolbarButton
             icon={<DarkTheme24Filled color="#00008B" />}
             onClick={() => setThemeName("oceanLightThemes")}
@@ -36,6 +39,24 @@ const ThemeSelector = () => {
           <ToolbarButton
             icon={<DarkTheme24Filled color="#006400" />}
             onClick={() => setThemeName("forestLightThemes")}
+          />
+        </div>
+        <Divider />
+        <Caption1>Dark Theme</Caption1>
+        <div>
+          <ToolbarButton
+            icon={<DarkTheme24Filled color="#00008B" />}
+            onClick={() => setThemeName("oceanDarkThemes")}
+          />
+
+          <ToolbarButton
+            icon={<DarkTheme24Filled color=" #800080" />}
+            onClick={() => setThemeName("purpleDarkThemes")}
+          />
+
+          <ToolbarButton
+            icon={<DarkTheme24Filled color="#006400" />}
+            onClick={() => setThemeName("forestDarkThemes")}
           />
         </div>
       </PopoverSurface>

@@ -3,39 +3,52 @@ import { useDropzone } from "react-dropzone";
 import Input from "./Input";
 import { useForm } from "react-hook-form";
 import { useUploadAttachment } from "../../services/service-attachment";
-import httpStatus from "http-status";
+import { useState } from "react";
 
 const Upload = ({ id }: { id: string }) => {
   const { register, handleSubmit } = useForm();
   const { mutateAsync: upload } = useUploadAttachment();
-  const { acceptedFiles, getRootProps, getInputProps } = useDropzone({
+  const [selectedImages, setSelectedImages] = useState<File[]>([]);
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+
+  const { getRootProps, getInputProps } = useDropzone({
     accept: {
       "image/jpeg": [],
       "image/jpg": [],
     },
+    onDrop: (acceptedFiles) => {
+      setSelectedImages(acceptedFiles);
+      const reader = new FileReader();
+      reader.readAsDataURL(acceptedFiles[0]);
+      reader.onload = () => {
+        setImagePreview(reader.result as string);
+      };
+    },
   });
 
-  const files = acceptedFiles.map((file: any) => (
-    <li key={file.path}>
-      {file.path} - {file.size} bytes
-    </li>
-  ));
-  const formData = new FormData();
-  acceptedFiles.forEach((file) => {
-    formData.append("files", file[0]);
-  });
+  const handleUpload = async (data: any) => {
+    if (!selectedImages) {
+      return;
+    }
 
-  const handleUpload = async (data) => {
-    const response = await upload({
-      formData,
-      tableName: "meetings",
-      rowId: id,
-      ...data,
-    });
-    if (response.status === httpStatus.OK) {
-      console.log("upload");
+    try {
+      await upload({
+        tableName: "meetings",
+        rowId: +id,
+        attachmentType: data.attachmentType,
+        file: selectedImages,
+      });
+
+      console.log("Upload successful");
+    } catch (error) {
+      console.error("Error uploading attachment:", error);
     }
   };
+  const handleRemoveImage = () => {
+    setSelectedImages([]);
+    setImagePreview(null);
+  };
+
   return (
     <form onSubmit={handleSubmit(handleUpload)}>
       <Input
@@ -49,9 +62,19 @@ const Upload = ({ id }: { id: string }) => {
             <input {...getInputProps()} />
             <p>Drag 'n' drop some files here, or click to select files</p>
           </div>
+          {imagePreview && (
+            <div>
+              <img src={imagePreview} alt="Preview" />
+              <Button onClick={handleRemoveImage}>Remove</Button>
+            </div>
+          )}
           <aside>
             <h4>Files</h4>
-            <ul>{files}</ul>
+            {selectedImages.map((file) => (
+              <div key={file.name}>
+                {file.name} - {file.size} bytes
+              </div>
+            ))}
           </aside>
         </section>
       </div>

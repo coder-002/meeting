@@ -15,11 +15,12 @@ const uploadAttachment = ({
 }) => {
   const formData = new FormData();
   formData.append("file", file);
-  return instance.post(api.attachments.post, {
-    tableName,
-    rowId,
-    attachmentType,
-    formData,
+  return instance.post(api.attachments.post, formData, {
+    params: {
+      tableName,
+      rowId,
+      attachmentType,
+    },
   });
 };
 
