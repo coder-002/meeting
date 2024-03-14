@@ -60,61 +60,31 @@ const MemberDetails = () => {
           onToggle={handleToggle}
         >
           <AccordionItem value="1" className="border-2 mb-4 shadow-md">
-            <AccordionHeader
-              style={{
-                backgroundColor: "#CDD8EF",
-              }}
-            >
-              Address
-            </AccordionHeader>
+            <AccordionHeader>Address</AccordionHeader>
             <AccordionPanel className="p-2">
               <AddressForm id={id || ""} />
             </AccordionPanel>
           </AccordionItem>
           <AccordionItem value="2" className="border-2 mb-4 shadow-md">
-            <AccordionHeader
-              style={{
-                backgroundColor: "#CDD8EF",
-              }}
-            >
-              Contact
-            </AccordionHeader>
+            <AccordionHeader>Contact</AccordionHeader>
             <AccordionPanel>
               <ContactForm id={id || ""} />
             </AccordionPanel>
           </AccordionItem>
           <AccordionItem value="3" className="border-2 mb-4 shadow-md">
-            <AccordionHeader
-              style={{
-                backgroundColor: "#CDD8EF",
-              }}
-            >
-              Office
-            </AccordionHeader>
+            <AccordionHeader>Office</AccordionHeader>
             <AccordionPanel>
               <OfficeForm id={id || ""} />
             </AccordionPanel>
           </AccordionItem>
           <AccordionItem value="4" className="border-2 mb-4 shadow-md">
-            <AccordionHeader
-              style={{
-                backgroundColor: "#CDD8EF",
-              }}
-            >
-              Identification
-            </AccordionHeader>
+            <AccordionHeader>Identification</AccordionHeader>
             <AccordionPanel>
               <IdentificationForm id={id || ""} />
             </AccordionPanel>
           </AccordionItem>
           <AccordionItem value="5" className="border-2 mb-4 shadow-md">
-            <AccordionHeader
-              style={{
-                backgroundColor: "#CDD8EF",
-              }}
-            >
-              Relations
-            </AccordionHeader>
+            <AccordionHeader>Relations</AccordionHeader>
             <AccordionPanel>
               <RelationForm id={id || ""} />
             </AccordionPanel>
