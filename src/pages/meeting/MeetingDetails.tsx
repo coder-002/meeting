@@ -108,7 +108,7 @@ const MeetingDetails = () => {
             </Modal>
           </div>
           <Divider />
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid lg:grid-cols-2 md:grid-cols-1 gap-4">
             <div className=" flex gap-4">
               <Subtitle2>Meeting Code :</Subtitle2>
               <Body2>{singleMeeting?.meetingCode}</Body2>

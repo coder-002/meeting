@@ -9,6 +9,7 @@ import {
   Branch16Filled,
   Group20Filled,
   Organization16Filled,
+  People20Filled,
   PositionToBack20Filled,
   Signature16Filled,
 } from "@fluentui/react-icons";
@@ -61,6 +62,13 @@ const Setup = ({ children }: { children: ReactNode }) => {
       value: "deduction",
       icon: <TrayItemRemove20Filled />,
       url: Navigation_Routes.DEDUCTION,
+    },
+    {
+      id: "7",
+      label: "Users",
+      value: "user",
+      icon: <People20Filled />,
+      url: Navigation_Routes.USER,
     },
   ];
 

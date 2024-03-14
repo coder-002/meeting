@@ -15,4 +15,5 @@ export const Navigation_Routes = {
   COMMITTEE_DETAILS: "/committee/members/:committeeId",
   PARTICIPANTS_DETAILS: "/meeting/participants/:meetingId",
   PROFILE: "/profile",
+  USER: "/user",
 };

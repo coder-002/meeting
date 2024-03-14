@@ -10,6 +10,9 @@ export const api = {
     get: "/org/branches",
     post: "/org/branch",
   },
+  user: {
+    get: "/user",
+  },
   committee: {
     get: "/committee",
     post: "/committee",

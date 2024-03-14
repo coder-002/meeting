@@ -17,6 +17,7 @@ import MeetingDetails from "../pages/meeting/MeetingDetails";
 import CommitteeMember from "../pages/setup/CommitteeMember";
 import Participants from "../pages/meeting/Participants";
 import Profile from "../pages/Profile";
+import UserInfo from "../pages/setup/UserInfo";
 
 const AppRoutes = () => {
   const routes = [
@@ -140,6 +141,16 @@ const AppRoutes = () => {
         <Layout>
           <Setup>
             <Deduction />
+          </Setup>
+        </Layout>
+      ),
+    },
+    {
+      path: Navigation_Routes.USER,
+      element: (
+        <Layout>
+          <Setup>
+            <UserInfo />
           </Setup>
         </Layout>
       ),
